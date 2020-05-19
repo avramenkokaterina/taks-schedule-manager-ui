@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html'
+    selector: 'tsm-root',
+    templateUrl: './app.component.html'
 })
 export class AppComponent {
-  title = 'task-schedule-manager';
 }

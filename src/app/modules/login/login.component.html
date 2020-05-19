@@ -1,0 +1,19 @@
+<div class="auth__wrapper">
+    <div class="auth__header mat-h4">Member Login</div>
+    <form class="auth__form" [formGroup]="_formGroup">
+        <mat-form-field class="auth__field">
+            <mat-label class="auth__label">Login</mat-label>
+            <input formControlName="login" matInput type="text">
+        </mat-form-field>
+        <mat-form-field class="auth__field">
+            <mat-label class="auth__label">Password</mat-label>
+            <input formControlName="password" matInput type="password">
+        </mat-form-field>
+    </form>
+    <button class="auth__sign-in-button"
+            mat-raised-button
+            color="primary"
+            [textContent]="'Sign In'"
+            [disabled]="_formGroup.invalid"
+            (click)="_login()"></button>
+</div>

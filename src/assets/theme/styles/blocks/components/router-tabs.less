@@ -1,0 +1,35 @@
+.router-tabs {
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+
+  &__tabs {
+    background-color: @blue-2e;
+    display: flex;
+    flex-direction: column;
+    padding-right: 7px;
+  }
+
+  &__tab {
+    padding: 6px 10px 7px 15px;
+    border-radius: 0px 20px 20px 0px;
+
+    cursor: pointer;
+
+    &._selected {
+      background-color: @grey-f9;
+    }
+
+    &-icon {
+      &._selected {
+        fill: @blue-2e;
+      }
+    }
+  }
+
+  &__content {
+    background-color: @grey-e5;
+    flex-grow: 1;
+  }
+
+}

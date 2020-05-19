@@ -1,0 +1,13 @@
+<div class="router-tabs__tabs">
+  <div *ngFor="let item of items"
+       class="router-tabs__tab"
+       [class._selected]="item.id === _selectedItem?.id"
+       (click)="_selectItem(item)">
+    <svg class="router-tabs__tab-icon icon-{{item.iconName}}" [class._selected]="item.id === _selectedItem?.id">
+      <use [attr.xlink:href]="'#icon-' + item.iconName"></use>
+    </svg>
+  </div>
+</div>
+<div class="router-tabs__content">
+  <router-outlet></router-outlet>
+</div>
