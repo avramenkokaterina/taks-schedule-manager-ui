@@ -1,0 +1,28 @@
+:host {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-edit {
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__form-field {
+    &+& {
+      margin-top: 10px;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

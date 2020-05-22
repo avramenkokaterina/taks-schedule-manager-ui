@@ -1,0 +1,9 @@
+<div class="parameters-panel__header mat-body">{{header}}</div>
+<div class="parameters-panel__params">
+    <ng-container *ngFor="let param of model">
+        <div class="parameters-panel__wrapper">
+            <div class="parameters-panel__label mat-caption">{{param.label}}</div>
+            <div class="parameters-panel__value mat-caption">{{param.value || '-'}}</div>
+        </div>
+    </ng-container>
+</div>

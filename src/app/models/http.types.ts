@@ -11,6 +11,7 @@ export enum RemoteProceduresNames {
     editProject = 'editProject',
     editSprint = 'editSprint',
     editTask = 'editTask',
+    deleteProject = 'deleteProject',
     getProjectBacklogTasks = 'getProjectBacklogTasks',
     getTasksByProject = 'getTasksByProject',
     getTasksBySprint = 'getTasksBySprint',

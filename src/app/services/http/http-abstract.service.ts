@@ -17,6 +17,7 @@ import {
 import {User} from '../../models/user.model';
 
 export abstract class HttpAbstractService implements HttpServiceType {
+    // TODO: wrong interface
     abstract signIn(credential: Credential): Observable<SignInResponse>;
     abstract assignTaskToSprint(ids: SprintTaskIds): Observable<DefaultResponse>;
     abstract assignUser(ids: UserProjectIds): Observable<DefaultResponse>;
@@ -27,6 +28,7 @@ export abstract class HttpAbstractService implements HttpServiceType {
     abstract editProject(project: Project): Observable<DefaultResponse>;
     abstract editSprint(sprint: Sprint): Observable<DefaultResponse>;
     abstract editTask(task: Task): Observable<Task>;
+    abstract deleteProject(projectId: ProjectId): Observable<DefaultResponse>;
     abstract getProjectBacklogTasks(ids: SprintProjectIds): Observable<Task[]>;
     abstract getTasksByProject(projectId: ProjectId): Observable<Task[]>;
     abstract getTasksBySprint(sprintId: SprintId): Observable<Task[]>;

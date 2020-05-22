@@ -18,6 +18,12 @@ export type Project = Readonly<{
     activeSprintId?: number;
     dueDate?: string;
     startDate?: string;
+    sprint?: string;
+    userCount?: number;
+    backlogCount?: number;
+    storyPoints?: number;
+    overdues?: number;
+    sprintCode?: string;
 }>;
 
 export interface ProjectId {

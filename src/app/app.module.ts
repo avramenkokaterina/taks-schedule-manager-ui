@@ -14,6 +14,8 @@ import {AppQuery} from './state/app/app.query';
 import {AppStore} from './state/app/app.store';
 import {HttpService} from './services/http/http.service';
 import {HttpClientModule} from '@angular/common/http';
+import {MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
+import {MatNativeDateModule} from '@angular/material/core';
 
 @NgModule({
     declarations: [
@@ -25,7 +27,8 @@ import {HttpClientModule} from '@angular/common/http';
         BrowserAnimationsModule,
         TMSRoutingModule,
         RouterTabsModule,
-        HttpClientModule
+        HttpClientModule,
+        MatNativeDateModule
     ],
     providers: [
         AppService,
@@ -37,10 +40,12 @@ import {HttpClientModule} from '@angular/common/http';
             useFactory: appBootstrap,
             deps: [
                 CookieService,
-                Router
+                Router,
+                AppService
             ],
             multi: true
-        }
+        },
+        {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {autoFocus: false, hasBackdrop: true}}
     ],
     bootstrap: [AppComponent]
 })

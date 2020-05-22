@@ -10,6 +10,11 @@ const routes: Routes = [
         component: TSMMainComponent,
         children: [
             {
+                path: '',
+                redirectTo: 'projects',
+                pathMatch: 'full'
+            },
+            {
                 path: 'projects',
                 component: TSMProjectsComponent
             }

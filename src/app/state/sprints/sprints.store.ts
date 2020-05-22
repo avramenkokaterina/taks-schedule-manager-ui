@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {EntityStore, StoreConfig} from '@datorama/akita';
-import {ProjectsState} from './projects.state';
+import {SprintsState} from './sprints.state';
 
 @Injectable({providedIn: 'root'})
-@StoreConfig({name: 'projects'})
-export class ProjectsStore extends EntityStore<ProjectsState> {
+@StoreConfig({name: 'sprints'})
+export class SprintsStore extends EntityStore<SprintsState> {
     constructor() {
         super();
     }
