@@ -1,10 +1,10 @@
-<tsm-parameters-panel [model]="_parameters"
+<tsm-parameters-panel class="project-card__parameters-panel" [model]="_parameters"
                       [header]="_header"></tsm-parameters-panel>
 <div class="project-card__footer">
-    <svg class="trash-icon" (click)="_deleteProject()">
+    <svg class="trash-icon" (click)="_deleteProject($event)">
         <use xlink:href="#icon-trash"></use>
     </svg>
-    <svg class="edit-icon" (click)="_editProject()">
+    <svg class="edit-icon" (click)="_editProject($event)">
         <use xlink:href="#icon-edit"></use>
     </svg>
 </div>

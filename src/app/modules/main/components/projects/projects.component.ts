@@ -3,6 +3,8 @@ import {ProjectsService} from '../../../../state/projects/projects.service';
 import {ProjectsQuery} from '../../../../state/projects/projects.query';
 import {MatDialog} from '@angular/material/dialog';
 import {ProjectEditComponent} from './components/project-edit/project-edit.component';
+import {Project} from '../../../../models/entity.model';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'tsm-projects',
@@ -15,7 +17,8 @@ export class TSMProjectsComponent implements OnInit {
 
     constructor(private service: ProjectsService,
                 private query: ProjectsQuery,
-                private matDialog: MatDialog) {
+                private matDialog: MatDialog,
+                private router: Router) {
     }
 
     ngOnInit(): void {
@@ -30,6 +33,11 @@ export class TSMProjectsComponent implements OnInit {
                 }
             }
         });
+    }
+
+    _selectProject(project: Project): void {
+        this.service.setSelected(project.id);
+        this.router.navigate(['main', 'kanban'])
     }
 
 }

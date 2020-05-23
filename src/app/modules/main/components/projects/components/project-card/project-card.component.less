@@ -4,12 +4,24 @@
   border-radius: 5px;
   background-color: white;
   margin-bottom: 20px;
+  width: 355px;
+  min-width: 355px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+
+  cursor: pointer;
 }
 
 .project-card {
   &__footer {
     display: flex;
     flex-direction: row-reverse;
+  }
+
+  &__parameters-panel {
+    flex-grow: 1;
   }
 }
 

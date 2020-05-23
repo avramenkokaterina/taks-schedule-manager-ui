@@ -7,14 +7,19 @@
     background-color: @blue-2e;
     display: flex;
     flex-direction: column;
-    padding-right: 7px;
+    padding: 32px 7px 20px 0;
   }
 
   &__tab {
     padding: 6px 10px 7px 15px;
     border-radius: 0px 20px 20px 0px;
+    margin-bottom: 15px;
 
     cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
 
     &._selected {
       background-color: @grey-f9;
@@ -23,11 +28,18 @@
         fill: @blue-2e;
       }
     }
+
+    &-icon {
+      fill: @grey-da;
+      width: 24px;
+      height: 24px;
+    }
   }
 
   &__content {
     background-color: @grey-e5;
     flex-grow: 1;
+    padding: 32px;
   }
 
 }

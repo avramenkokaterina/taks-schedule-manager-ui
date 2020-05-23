@@ -28,6 +28,10 @@ export class ProjectCardComponent implements OnChanges, OnInit {
         if (changes.project) {
             this._parameters = [
                 {
+                    label: 'Code',
+                    value: this.project.code
+                },
+                {
                     label: 'Active Sprint',
                     value: this.project.sprint ? `${this.project.sprintCode}-${this.project.sprint}` : '-'
                 },
@@ -53,18 +57,20 @@ export class ProjectCardComponent implements OnChanges, OnInit {
                 }
             ];
 
-            this._header = `${this.project.name} (${this.project.code})`;
+            this._header = this.project.name;
         }
     }
 
     ngOnInit(): void {
     }
 
-    _deleteProject(): void {
+    _deleteProject(event: Event): void {
+        event.stopPropagation();
         this.projectsService.delete(this.project.id);
     }
 
-    _editProject(): void {
+    _editProject(event: Event): void {
+        event.stopPropagation();
         const submit = (project: Project): void => {
             this.projectsService.update(project);
         }

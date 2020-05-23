@@ -15,9 +15,29 @@ export class TSMMainComponent {
             iconName: 'squares'
         },
         {
-            id: 'people',
-            link: 'people',
+            id: 'kanban',
+            link: 'kanban',
+            iconName: 'kanban'
+        },
+        {
+            id: 'ganChart',
+            link: 'gan-chart',
+            iconName: 'calendar'
+        },
+        {
+            id: 'projectTeam',
+            link: 'project-team',
             iconName: 'people'
+        },
+        {
+            id: 'statistic',
+            link: 'statistic',
+            iconName: 'statistic'
+        },
+        {
+            id: 'tasks',
+            link: 'tasks',
+            iconName: 'list'
         }
     ];
 

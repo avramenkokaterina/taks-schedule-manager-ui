@@ -1,9 +1,11 @@
 <div class="projects__header">
     <div class="projects__header-text mat-h2">My Projects</div>
-    <button class="projects__add-button" mat-raised-button color="accent" (click)="_addProject()">Add Project</button>
+    <button class="projects__add-button" mat-raised-button color="accent"
+            (click)="_addProject()">Add Project</button>
 </div>
 <div class="projects__wrapper">
     <ng-container *ngFor="let project of (_projects$ | async)">
-        <tsm-project-card class="projects__card" [project]="project"></tsm-project-card>
+        <tsm-project-card class="projects__card" [project]="project"
+                          (click)="_selectProject(project)"></tsm-project-card>
     </ng-container>
 </div>
