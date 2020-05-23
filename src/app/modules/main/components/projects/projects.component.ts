@@ -37,7 +37,11 @@ export class TSMProjectsComponent implements OnInit {
 
     _selectProject(project: Project): void {
         this.service.setSelected(project.id);
-        this.router.navigate(['main', 'kanban'])
+        this.router.navigate(['main', 'kanban'], {
+            queryParams: {
+                sprintId: project.activeSprintId
+            }
+        });
     }
 
 }

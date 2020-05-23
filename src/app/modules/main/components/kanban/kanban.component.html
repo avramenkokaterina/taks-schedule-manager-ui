@@ -1,1 +1,34 @@
-<p>kanban works!</p>
+<ng-container *ngIf="!_isError; else errorTemplate">
+    <ng-container [ngTemplateOutlet]="kanbanTemplate"
+                  [ngTemplateOutletContext]="{tasks: _tasks$ | async}"></ng-container>
+</ng-container>
+
+<ng-template #kanbanTemplate let-tasks="tasks">
+    <ng-container *ngIf="tasks?.length; else errorTemplate">
+        <div class="kanban__widgets"></div>
+<!--        <div class="kanban__sprint">-->
+<!--            <div class="kanban__sprint-left">-->
+<!--                <div class="kanban__sprint-name"></div>-->
+<!--                <div class="kanban__reload-button"></div>-->
+<!--            </div>-->
+<!--            <div class="kanban__sprint-right">-->
+<!--                <button class="kanban__edit-sprint">-->
+<!--                    Edit Sprint-->
+<!--                </button>-->
+<!--                <button class="kanban__plan-sprint">-->
+<!--                    Plan Sprint-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="kanban__tasks">
+            <tsm-task-column *ngFor="let status of _statuses"
+                             class="kanban__task-column"
+                             [tasks]="tasks"
+                             [status]="status"></tsm-task-column>
+        </div>
+    </ng-container>
+</ng-template>
+
+<ng-template #errorTemplate>
+    <div class="kanban__error">{{_errorMessage}}</div>
+</ng-template>

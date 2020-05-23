@@ -1,0 +1,8 @@
+<div class="task-column__header mat-h4" [ngStyle]="{'background-color': _color}">
+    <div class="task-column__header-text">
+        {{_labelByStatus[status]}} ({{_tasks.length}})
+    </div>
+</div>
+<ng-container *ngFor="let task of _tasks">
+    <tsm-task-card class="task-column__card" [task]="task"></tsm-task-card>
+</ng-container>

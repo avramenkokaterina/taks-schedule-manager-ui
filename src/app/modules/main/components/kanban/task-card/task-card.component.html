@@ -1,0 +1,14 @@
+<div class="task-card__header mat-caption">
+    <div class="task-card__header-left">
+        <div class="task-card__code .mat-body-2">{{task.code}}</div>
+    </div>
+    <div class="task-card__header-right">
+        <div class="task-card__date-label">Due Date:    </div>
+        <div class="task-card__due-date">{{task.dueDate | date: 'dd.MM.yyyy'}}</div>
+    </div>
+</div>
+<div class="task-card__name mat-body">{{task.name}}</div>
+<div class="task-card__user mat-caption">
+    <div class="task-card__user-color" [ngStyle]="{'background-color': task.color}"></div>
+    <div class="task-card__user-name">{{task.userName}}</div>
+</div>

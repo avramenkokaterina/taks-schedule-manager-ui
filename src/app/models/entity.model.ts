@@ -52,7 +52,7 @@ export enum TaskStatus {
     OPEN = 'open',
     IN_PROGRESS = 'in_progress',
     CANCELED = 'canceled',
-    COMPLETE = 'complete'
+    CLOSED = 'closed'
 }
 
 export type Task = Readonly<{
@@ -70,6 +70,8 @@ export type Task = Readonly<{
     name: string;
     code: string;
     order?: number;
+    color?: string;
+    userName?: string;
 }>;
 
 export interface UserId {

@@ -1,0 +1,60 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 5px 10px;
+  border: 1px solid #E5E5E5;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.04);
+  border-radius: 5px;
+}
+
+.task-card {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+
+    &-left {
+      display: flex;
+      align-items: center;
+    }
+
+    &-right {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__code {
+    font-weight: bold;
+  }
+
+  &__date-label {
+    color: gray;
+  }
+
+  &__due-date {
+    margin-left: 5px;
+  }
+
+  &__name {
+    margin-top: 2px;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+
+    &-color {
+      border-radius: 50%;
+      height: 16px;
+      width: 16px;
+    }
+
+    &-name {
+      margin-left: 4px;
+    }
+  }
+}
