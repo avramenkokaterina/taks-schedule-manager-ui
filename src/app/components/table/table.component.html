@@ -1,0 +1,22 @@
+<div class="table__row _header mat-body-strong">
+    <div class="table__column _checkbox _header">
+        <mat-checkbox [checked]="model?.header?.selected" (change)="_selectAll($event.checked)"></mat-checkbox>
+    </div>
+    <div class="table__column _header"
+         *ngFor="let column of model?.header?.columns"
+         [ngClass]="column?.styleClass">
+        {{column.value}}
+    </div>
+</div>
+<div class="table__row mat-body" *ngFor="let row of model.rows" [ngClass]="row?.styleClass">
+    <div class="table__column _checkbox">
+        <mat-checkbox [checked]="row?.selected"
+                      [ngClass]="row.styleClass"
+                      (change)="_selectedChange(row.id, $event.checked)"></mat-checkbox>
+    </div>
+    <div *ngFor="let column of row?.columns"
+         [ngClass]="column?.styleClass"
+         class="table__column">
+        {{column?.value}}
+    </div>
+</div>

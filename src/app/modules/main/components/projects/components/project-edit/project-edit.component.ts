@@ -34,7 +34,7 @@ export class ProjectEditComponent implements OnInit {
         this.data.onSubmit({
             ...this._formGroup.value,
             startDate: this._formGroup.value.startDate && dayjs(this._formGroup.value.startDate).format(),
-            dueDate: this._formGroup.value.dueDate && dayjs(this._formGroup.value.dueDate).format("")
+            dueDate: this._formGroup.value.dueDate && dayjs(this._formGroup.value.dueDate).format()
         });
     }
 }

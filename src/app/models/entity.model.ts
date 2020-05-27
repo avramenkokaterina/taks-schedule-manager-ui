@@ -37,6 +37,7 @@ export type Sprint = Readonly<{
     startDate?: string;
     endDate?: string;
     readonly?: boolean;
+    tasks?: number[];
 }>;
 
 export interface SprintId {
@@ -80,7 +81,7 @@ export interface UserId {
 
 export type GanChartInfo = Readonly<{
     user: User;
-    notCompleted: number;
+    completed: number;
     total: number;
     tasks: Task[];
 }>;

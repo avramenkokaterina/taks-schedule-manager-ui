@@ -1,0 +1,34 @@
+<h1 mat-dialog-title>Sprint Configuration</h1>
+<div mat-dialog-content class="sprint-edit__wrapper">
+    <form class="sprint-edit__general" [formGroup]="_formGroup">
+        <mat-form-field class="sprint-edit__form-field _long">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+        </mat-form-field>
+        <mat-form-field class="sprint-edit__form-field">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="startDate">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="sprint-edit__form-field">
+            <mat-label>Due Date</mat-label>
+            <input matInput [matDatepicker]="picker2" formControlName="endDate">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+
+    </form>
+    <div class="sprint-edit__tasks" *ngIf="_tasks">
+        <tsm-table [model]="_taskTableModel"
+                   (itemsSelect)="_selectTasks($event)"
+                   (itemsUnselect)="_unselectTasks($event)"></tsm-table>
+    </div>
+    <div class="sprint-edit__metrics">
+        <tsm-parameters-panel [model]="_metrics"></tsm-parameters-panel>
+    </div>
+</div>
+<div mat-dialog-actions class="sprint-edit__controls">
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" (click)="_save()">Save</button>
+</div>

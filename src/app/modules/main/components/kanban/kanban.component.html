@@ -1,25 +1,27 @@
 <ng-container *ngIf="!_isError; else errorTemplate">
     <ng-container [ngTemplateOutlet]="kanbanTemplate"
-                  [ngTemplateOutletContext]="{tasks: _tasks$ | async}"></ng-container>
+                  [ngTemplateOutletContext]="{tasks: _tasks$ | async, sprint: _activeSprint$ | async}"></ng-container>
 </ng-container>
 
-<ng-template #kanbanTemplate let-tasks="tasks">
+<ng-template #kanbanTemplate let-tasks="tasks" let-sprint="sprint">
     <ng-container *ngIf="tasks?.length; else errorTemplate">
         <div class="kanban__widgets"></div>
-<!--        <div class="kanban__sprint">-->
-<!--            <div class="kanban__sprint-left">-->
-<!--                <div class="kanban__sprint-name"></div>-->
-<!--                <div class="kanban__reload-button"></div>-->
-<!--            </div>-->
-<!--            <div class="kanban__sprint-right">-->
-<!--                <button class="kanban__edit-sprint">-->
-<!--                    Edit Sprint-->
-<!--                </button>-->
-<!--                <button class="kanban__plan-sprint">-->
-<!--                    Plan Sprint-->
-<!--                </button>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="kanban__sprint">
+            <div class="kanban__sprint-left">
+                <div class="kanban__sprint-name mat-body-strong">{{sprint?.code}} {{sprint?.name}}</div>
+                <svg class="kanban__reload-button" (click)="_reload()">
+                    <use xlink:href="#icon-reload"></use>
+                </svg>
+            </div>
+            <div class="kanban__sprint-right" *ngIf="!sprint?.readonly">
+                <button class="kanban__edit-sprint" mat-raised-button color="accent" (click)="_editSprint()">
+                    Edit Sprint
+                </button>
+                <button class="kanban__plan-sprint" mat-raised-button color="accent" (click)="_startSprint()">
+                    Plan Sprint
+                </button>
+            </div>
+        </div>
         <div class="kanban__tasks">
             <tsm-task-column *ngFor="let status of _statuses"
                              class="kanban__task-column"

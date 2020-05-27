@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ProjectEditComponent} from './components/project-edit/project-edit.component';
 import {Project} from '../../../../models/entity.model';
 import {Router} from '@angular/router';
+import {SprintsService} from '../../../../state/sprints/sprints.service';
 
 @Component({
     selector: 'tsm-projects',
@@ -17,6 +18,7 @@ export class TSMProjectsComponent implements OnInit {
 
     constructor(private service: ProjectsService,
                 private query: ProjectsQuery,
+                private sprintsService: SprintsService,
                 private matDialog: MatDialog,
                 private router: Router) {
     }
@@ -37,6 +39,11 @@ export class TSMProjectsComponent implements OnInit {
 
     _selectProject(project: Project): void {
         this.service.setSelected(project.id);
+        if (project.activeSprintId) {
+            this.sprintsService.fetchActiveById(project.activeSprintId);
+        } else {
+            this.sprintsService.resetActive();
+        }
         this.router.navigate(['main', 'kanban'], {
             queryParams: {
                 sprintId: project.activeSprintId

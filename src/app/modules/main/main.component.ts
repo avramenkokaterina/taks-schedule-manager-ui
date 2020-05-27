@@ -1,12 +1,16 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RouterTabItem} from '../../components/router-tabs/router-tabs.types';
+import {ProjectsService} from '../../state/projects/projects.service';
+import {SprintsService} from '../../state/sprints/sprints.service';
+import {Subject} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'tsm-main',
     templateUrl: './main.component.html',
     styleUrls: ['./main.component.css']
 })
-export class TSMMainComponent {
+export class TSMMainComponent implements OnInit {
 
     _tabItems: RouterTabItem[] = [
         {
@@ -41,7 +45,15 @@ export class TSMMainComponent {
         }
     ];
 
-    constructor() {
+    private destroyStream = new Subject();
+
+    constructor(private sprintsService: SprintsService,
+                private route: ActivatedRoute) {
+
     }
 
+    ngOnInit() {
+        const sprintId = this.route.snapshot.queryParamMap.get('sprintId');
+        sprintId && this.sprintsService.fetchActiveById(parseInt(sprintId, 10));
+    }
 }

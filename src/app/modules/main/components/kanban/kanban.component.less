@@ -7,6 +7,42 @@
 }
 
 .kanban {
+  &__sprint {
+    display: flex;
+    align-self: stretch;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    &-left {
+      display: flex;
+      align-items: center;
+    }
+
+
+
+    &-right {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__reload-button {
+    margin-left: 10px;
+    height: 24px;
+    width: 24px;
+    fill: gray;
+    cursor: pointer;
+  }
+
+  &__edit-sprint {
+    background-color: #81B29A;
+  }
+
+  &__plan-sprint {
+    margin-left: 10px;
+  }
+
   &__tasks {
     display: flex;
     align-items: stretch;

@@ -35,7 +35,7 @@ export abstract class HttpAbstractService implements HttpServiceType {
     abstract projectsByUser(userId: UserId): Observable<Project[]>;
     abstract registerUser(credential: Credential): Observable<DefaultResponse>;
     abstract sprintById(sprintId: SprintId): Observable<Sprint>;
-    abstract sprintGanChart(sprintId: SprintId): Observable<GanChartInfo>;
+    abstract sprintGanChart(sprintId: SprintId): Observable<GanChartInfo[]>;
     abstract status(): Observable<DefaultResponse>;
     abstract unassignUser(ids: UserProjectIds): Observable<DefaultResponse>;
     abstract usersByProject(projectId: ProjectId): Observable<User[]>;
