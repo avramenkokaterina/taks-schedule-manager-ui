@@ -1,1 +1,46 @@
-<p>project-team works!</p>
+<ng-container *ngIf="!_isLoading; else loading">
+    <ng-container *ngIf="_projectId; else noProject">
+        <ng-container *ngIf="_users; else noUsers">
+            <div class="project-team__header">
+                <div class="project-team__header-left mat-h1">
+                    <span>Team</span>
+                </div>
+                <div class="project-team__header-right">
+                    <button mat-raised-button color="accent">Add User</button>
+                </div>
+            </div>
+            <div class="project-team__table mat-body">
+                <div class="project-team__row _header mat-body-strong">
+                    <div class="project-team__column _name _header">Name</div>
+                    <div class="project-team__column _position">Position</div>
+                    <div class="project-team__column _email">Email</div>
+                    <div class="project-team__column _delete">
+                    </div>
+                </div>
+                <div class="project-team__row _body"
+                     *ngFor="let user of _users">
+                    <div class="project-team__column _name">
+                        <div class="project-team__color" [ngStyle]="{'background-color': user.color}"></div>
+                        <div class="project-team__name">{{user.fullName}}</div>
+                    </div>
+                    <div class="project-team__column _position">{{user.position}}</div>
+                    <div class="project-team__column _email">{{user.email}}</div>
+                    <div class="project-team__column _delete">
+                        <svg class="icon-delete">
+                            <use xlink:href="#icon-delete"></use>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-container>
+<ng-template #loading>
+    <div class="mat-h1">Loading...</div>
+</ng-template>
+<ng-template #noProject>
+    <div class="mat-h1">No Project Selected</div>
+</ng-template>
+<ng-template #noUsers>
+    <div class="mat-h1">No Users in Project</div>
+</ng-template>

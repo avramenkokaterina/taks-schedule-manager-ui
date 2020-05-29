@@ -1,0 +1,102 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex-grow: 1;
+}
+
+.project-team {
+  &__header {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &-left {
+      display: flex;
+      align-items: center;
+    }
+
+    &-right {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__table {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-width: 500px;
+
+    border: 1px solid #F6E6D2;
+    background-color: white;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    padding: 13px;
+
+    &._header {
+      color: #5F6368;
+      background-color: #F4F1DE;
+    }
+
+    &._body {
+      border-top: 1px solid #F6E6D2;
+    }
+  }
+
+  &__column {
+    display: flex;
+    align-items: center;
+
+    &._name {
+      min-width: 150px;
+      flex-basis: 30%;
+      flex-grow: 1;
+      &._header {
+        padding-left: 17px;
+      }
+    }
+
+    &._position {
+      min-width: 100px;
+      flex-basis: 20%;
+      flex-grow: 1;
+    }
+
+    &._email {
+      min-width: 150px;
+      flex-basis: 30%;
+      flex-grow: 1;
+    }
+
+    &._delete {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+    }
+  }
+
+  &__color {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+  }
+
+  &__name {
+    margin-left: 4px;
+  }
+}
+
+.icon-delete {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  fill: gray;
+  cursor: pointer;
+}
