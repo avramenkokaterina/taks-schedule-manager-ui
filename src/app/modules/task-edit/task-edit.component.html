@@ -1,0 +1,47 @@
+<h1 mat-dialog-title>Task Configuration</h1>
+<div mat-dialog-content class="task-edit__wrapper">
+    <form class="task-edit__form" [formGroup]="_formGroup">
+        <mat-form-field class="task-edit__form-field">
+            <mat-label>Name</mat-label>
+            <input matInput
+                   formControlName="name">
+        </mat-form-field>
+        <mat-form-field class="task-edit__form-field">
+            <mat-label>Due Date</mat-label>
+            <input matInput
+                   [matDatepicker]="picker1"
+                   formControlName="dueDate">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="task-edit__form-field">
+            <mat-label>Expected Duration (hours)</mat-label>
+            <input matInput type="number" min="1" formControlName="estimate">
+        </mat-form-field>
+        <mat-form-field class="task-edit__form-field">
+            <mat-label>Story Points</mat-label>
+            <input matInput type="number" min="1" formControlName="storyPoints">
+        </mat-form-field>
+        <ng-container *ngIf="_task">
+            <mat-form-field>
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                    <mat-option *ngFor="let status of _statuses"
+                                [value]="status">{{status}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="task-edit__form-field">
+                <mat-label>Actual Duration</mat-label>
+                <input matInput type="number" min="1" formControlName="actualDuration">
+            </mat-form-field>
+        </ng-container>
+        <mat-form-field class="task-edit__form-field">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions class="task-edit__controls">
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" (click)="_save()">Save</button>
+</div>

@@ -33,7 +33,7 @@ export class ProjectCardComponent implements OnChanges, OnInit {
                 },
                 {
                     label: 'Active Sprint',
-                    value: this.project.sprint ? `${this.project.sprintCode}-${this.project.sprint}` : '-'
+                    value: this.project.sprint ? `${this.project.sprint}` : '-'
                 },
                 {
                     label: 'Team',
@@ -72,7 +72,7 @@ export class ProjectCardComponent implements OnChanges, OnInit {
     _editProject(event: Event): void {
         event.stopPropagation();
         const submit = (project: Project): void => {
-            this.projectsService.update(project);
+            this.projectsService.update(project).subscribe();
         }
         this.matDialog.open(ProjectEditComponent, {
             data: {

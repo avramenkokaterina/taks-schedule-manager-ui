@@ -12,6 +12,7 @@ import * as dayjs from 'dayjs';
 export class ProjectEditComponent implements OnInit {
 
     _formGroup: FormGroup;
+    _isEdit = false;
 
     constructor(@Inject(MAT_DIALOG_DATA) public data: { project?: Project, onSubmit: (project: Project) => void }) {
     }

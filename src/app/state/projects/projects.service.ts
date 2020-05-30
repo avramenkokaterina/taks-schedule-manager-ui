@@ -3,10 +3,12 @@ import {ProjectsQuery} from './projects.query';
 import {ProjectsStore} from './projects.store';
 import {HttpService} from '../../services/http/http.service';
 import {AppQuery} from '../app/app.query';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {Project} from '../../models/entity.model';
+import {Observable, Subject} from 'rxjs';
+import {takeUntil, tap} from 'rxjs/operators';
+import {DefaultResponse, Project} from '../../models/entity.model';
 import {nullDelete} from '../../utils/null-delete';
+import {TasksStore} from '../tasks/tasks.store';
+import {SprintsStore} from '../sprints/sprints.store';
 
 @Injectable({providedIn: 'root'})
 export class ProjectsService implements OnDestroy {
@@ -16,7 +18,9 @@ export class ProjectsService implements OnDestroy {
     constructor(private projectsQuery: ProjectsQuery,
                 private projectsStore: ProjectsStore,
                 private http: HttpService,
-                private appQuery: AppQuery) {
+                private appQuery: AppQuery,
+                private tasksStore: TasksStore,
+                private sprintsStore: SprintsStore) {
     }
 
     fetch(): void {
@@ -34,6 +38,8 @@ export class ProjectsService implements OnDestroy {
             ...state,
             selected: this.projectsQuery.getEntity(id)
         }));
+        this.tasksStore.set([]);
+        this.sprintsStore.setActive(null);
     }
 
     create(project: Project): void {
@@ -44,12 +50,17 @@ export class ProjectsService implements OnDestroy {
             });
     }
 
-    update(project: Project): void {
-        this.http.editProject(nullDelete(project))
-            .pipe(takeUntil(this.destroyStream$))
-            .subscribe(() => {
-                this.fetch();
-            });
+    update(project: Partial<Project>): Observable<DefaultResponse> {
+        return this.http.editProject(nullDelete(project) as Project)
+            .pipe(
+                takeUntil(this.destroyStream$),
+                tap(() => {
+                    if (project.id === (this.projectsQuery.selected && this.projectsQuery.selected.id)) {
+                        this.setSelected(project.id)
+                    }
+                    this.fetch();
+                })
+            );
     }
 
     delete(id: number): void {

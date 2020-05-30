@@ -11,6 +11,9 @@ export class TableComponent implements OnChanges {
     @Input()
     model: TableModel;
 
+    @Input()
+    checkboxes = true;
+
     @Output()
     itemsSelect = new EventEmitter<number[]>();
 
@@ -96,7 +99,7 @@ export class TableComponent implements OnChanges {
     }
 
     private selectHeaderIfAllSelected(): void {
-        if (this.selectedCount === this.model.rows.length) {
+        if (this.selectedCount && (this.selectedCount === this.model.rows.length)) {
             this.setSelectedForHeader(true);
         } else {
             this.setSelectedForHeader(false);

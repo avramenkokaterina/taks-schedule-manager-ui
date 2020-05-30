@@ -5,14 +5,14 @@ import {
     DefaultResponse,
     GanChartInfo,
     Project,
-    ProjectId,
+    ProjectId, ResponseWIthId, ResponseWIthSprint,
     Sprint,
     SprintId,
     SprintProjectIds,
     SprintTaskIds,
     Task,
     UserId,
-    UserProjectIds
+    UserProjectIds, UsersProjectIds
 } from '../../models/entity.model';
 import {User} from '../../models/user.model';
 
@@ -20,14 +20,15 @@ export abstract class HttpAbstractService implements HttpServiceType {
     // TODO: wrong interface
     abstract signIn(credential: Credential): Observable<SignInResponse>;
     abstract assignTaskToSprint(ids: SprintTaskIds): Observable<DefaultResponse>;
-    abstract assignUser(ids: UserProjectIds): Observable<DefaultResponse>;
+    abstract assignUser(ids: UsersProjectIds): Observable<DefaultResponse>;
     abstract createProject(project: Project): Observable<DefaultResponse>;
-    abstract createSprint(sprint: Sprint): Observable<DefaultResponse>;
+    abstract createSprint(sprint: Sprint): Observable<ResponseWIthSprint>;
     abstract createSprintSchedule(sprintId: SprintId): Observable<DefaultResponse>;
     abstract createTask(task: Task): Observable<DefaultResponse>;
     abstract editProject(project: Project): Observable<DefaultResponse>;
     abstract editSprint(sprint: Sprint): Observable<DefaultResponse>;
     abstract editTask(task: Task): Observable<Task>;
+    abstract deleteTasks(ids: {taskIds: number[]}): Observable<DefaultResponse>;
     abstract deleteProject(projectId: ProjectId): Observable<DefaultResponse>;
     abstract getProjectBacklogTasks(ids: SprintProjectIds): Observable<Task[]>;
     abstract getTasksByProject(projectId: ProjectId): Observable<Task[]>;
@@ -40,5 +41,5 @@ export abstract class HttpAbstractService implements HttpServiceType {
     abstract unassignUser(ids: UserProjectIds): Observable<DefaultResponse>;
     abstract usersByProject(projectId: ProjectId): Observable<User[]>;
     // TODO: check returnType
-    abstract usersNotInProject(projectId: ProjectId): Observable<{userId: number}[]>;
+    abstract usersNotInProject(projectId: ProjectId): Observable<User[]>;
 }

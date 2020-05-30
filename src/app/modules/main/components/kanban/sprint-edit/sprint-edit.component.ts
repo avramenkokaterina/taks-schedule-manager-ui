@@ -39,11 +39,12 @@ export class SprintEditComponent implements OnInit, OnDestroy {
     ];
 
     _tasks: Task[];
+
     private selectedTasks: Set<number> = new Set();
 
     private destroyStream$ = new Subject();
 
-    constructor(@Inject(MAT_DIALOG_DATA) private data: { sprint: Sprint, onSave: (sprint: Sprint, selectedSet: Set<number>) => void },
+    constructor(@Inject(MAT_DIALOG_DATA) private data: { sprint?: Sprint, projectId?: number, onSave: (sprint: Sprint, selectedSet: Set<number>) => void },
                 private http: HttpService) {
     }
 
@@ -58,17 +59,17 @@ export class SprintEditComponent implements OnInit, OnDestroy {
 
         this._sprint = this.data && this.data.sprint;
 
+        this.http.getProjectBacklogTasks({projectId: this.data.projectId ?? this.data.sprint.projectId, sprintId: this._sprint && this._sprint.id})
+            .pipe(takeUntil(this.destroyStream$))
+            .subscribe((tasks) => {
+                this._tasks = tasks;
+                tasks.forEach((task) => this._sprint && (task.sprintId === this._sprint.id) && this.selectedTasks.add(task.id));
+                this._taskTableModel = this.tasksToTable(tasks);
+            });
+
         if (this._sprint) {
             this._formGroup.addControl('id', new FormControl(this._sprint.id));
             this._formGroup.patchValue(this._sprint);
-            this.http.getProjectBacklogTasks({projectId: this.data.sprint.projectId, sprintId: this._sprint.id})
-                .pipe(takeUntil(this.destroyStream$))
-                .subscribe((tasks) => {
-                    this._tasks = tasks;
-                    tasks.forEach((task) => task.sprintId === this._sprint.id && this.selectedTasks.add(task.id));
-                    this._taskTableModel = this.tasksToTable(tasks);
-                });
-
         }
 
     }

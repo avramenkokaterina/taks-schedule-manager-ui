@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Sprint, TaskStatus} from '../../../../models/entity.model';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {Sprint, Task, TaskStatus} from '../../../../models/entity.model';
 import {TasksQuery} from '../../../../state/tasks/tasks.query';
 import {TasksService} from '../../../../state/tasks/tasks.service';
 import {ProjectsQuery} from '../../../../state/projects/projects.query';
@@ -11,6 +11,9 @@ import {MatDialog} from '@angular/material/dialog';
 import {SprintEditComponent} from './sprint-edit/sprint-edit.component';
 import {HttpService} from '../../../../services/http/http.service';
 import {takeUntil} from 'rxjs/operators';
+import {TaskEditComponent} from '../../../task-edit/task-edit.component';
+import {nullDelete} from '../../../../utils/null-delete';
+import {ProjectsService} from '../../../../state/projects/projects.service';
 
 @Component({
     selector: 'tsm-kanban',
@@ -29,6 +32,8 @@ export class KanbanComponent implements OnInit, OnDestroy {
 
     _activeSprint$: Observable<Sprint> = this.sprintsQuery.selectActive();
 
+    _createSprintButton = false;
+
     private sprintId: number;
 
     private destroyStream$ = new Subject();
@@ -41,7 +46,9 @@ export class KanbanComponent implements OnInit, OnDestroy {
                 private sprintsService: SprintsService,
                 private sprintsQuery: SprintsQuery,
                 private matDialog: MatDialog,
-                private http: HttpService) {
+                private http: HttpService,
+                private projectsService: ProjectsService,
+                private cdr: ChangeDetectorRef) {
     }
 
     ngOnInit(): void {
@@ -54,20 +61,11 @@ export class KanbanComponent implements OnInit, OnDestroy {
             const project = this.projectsQuery.selected;
             if (project) {
                 if (project.activeSprintId) {
-                    this.sprintId = project.activeSprintId;
-                    this.tasksService.fetchBySprintId(project.activeSprintId);
-                    this.sprintsService.fetchActiveById(project.activeSprintId);
-                    this.router.navigate([], {
-                        queryParams: {
-                            sprintId: project.activeSprintId
-                        },
-                        relativeTo: this.route,
-                        queryParamsHandling: 'merge',
-                        replaceUrl: true
-                    });
+                    this.load(project.activeSprintId);
                 } else {
                     this._errorMessage = 'No active sprint in project';
                     this._isError = true;
+                    this._createSprintButton = true;
                 }
 
             } else {
@@ -106,8 +104,61 @@ export class KanbanComponent implements OnInit, OnDestroy {
         this.http.createSprintSchedule({sprintId: this.sprintId})
             .pipe(takeUntil(this.destroyStream$))
             .subscribe(() => {
-                this.sprintsService.fetchActiveById(this.sprintId)
+                this.sprintsService.fetchActiveById(this.sprintId);
             });
+    }
+
+    _createSprint() {
+        this.matDialog.open(SprintEditComponent, {
+            data: {
+                projectId: this.projectsQuery.selected.id,
+                onSave: (sprint: Sprint, selectedSet: Set<number>) => {
+                    this.sprintsService.create({
+                        ...sprint,
+                        tasks: selectedSet && Array.from(selectedSet) || [],
+                        projectId: this.projectsQuery.selected.id
+                    }).subscribe((response) => {
+                        this.sprintId = response.sprint.id;
+                        this.load(this.sprintId);
+                        this.projectsService.update({id: this.projectsQuery.selected.id, activeSprintId: response.sprint.id})
+                            .subscribe();
+                        this.cdr.markForCheck();
+                    });
+                    this._isError = false;
+                }
+            }
+        });
+    }
+
+    _editTask(task: Task) {
+        this.matDialog.open(TaskEditComponent, {
+            data: {
+                task: task,
+                onSubmit: (task: Task) => {
+                    this.http.editTask(nullDelete(task))
+                        .pipe(
+                            takeUntil(this.destroyStream$)
+                        )
+                        .subscribe(() => {
+                            this.tasksService.fetchBySprintId(this.sprintId);
+                        });
+                }
+            }
+        });
+    }
+
+    private load(sprintId: number) {
+        this.sprintId = sprintId;
+        this.tasksService.fetchBySprintId(sprintId);
+        this.sprintsService.fetchActiveById(sprintId);
+        this.router.navigate([], {
+            queryParams: {
+                sprintId: sprintId
+            },
+            relativeTo: this.route,
+            queryParamsHandling: 'merge',
+            replaceUrl: true
+        });
     }
 
 }

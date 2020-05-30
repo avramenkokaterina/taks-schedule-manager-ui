@@ -4,6 +4,8 @@ import {ProjectsQuery} from '../../../../state/projects/projects.query';
 import {User} from '../../../../models/user.model';
 import {Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
+import {MatDialog} from '@angular/material/dialog';
+import {TeamSelectComponent} from './components/team-select/team-select.component';
 
 @Component({
     selector: 'tsm-project-team',
@@ -22,7 +24,8 @@ export class ProjectTeamComponent implements OnInit, OnDestroy {
 
     constructor(private projectsQuery: ProjectsQuery,
                 private http: HttpService,
-                private cdr: ChangeDetectorRef) {
+                private cdr: ChangeDetectorRef,
+                private matDialog: MatDialog) {
     }
 
     ngOnInit(): void {
@@ -38,6 +41,7 @@ export class ProjectTeamComponent implements OnInit, OnDestroy {
     }
 
     _delete(id: number) {
+        this._users = this._users.filter(user => user.id !== id);
         this.http.unassignUser({userId: id, projectId: this._projectId})
             .pipe(
                 takeUntil(this.destroyStream$)
@@ -45,6 +49,22 @@ export class ProjectTeamComponent implements OnInit, OnDestroy {
             .subscribe(() => {
                 this.load();
             });
+    }
+
+    _manageTeam() {
+        this.matDialog.open(TeamSelectComponent, {
+            data: {
+                projectId: this._projectId,
+                onSubmit: (selected: User[]) => {
+                    this.http.assignUser({
+                        userIds: selected.map(user => user.id),
+                        projectId: this._projectId
+                    }).subscribe(() => {
+                        this.load();
+                    });
+                }
+            }
+        });
     }
 
     private load() {

@@ -4,7 +4,8 @@ import {SprintsStore} from './sprints.store';
 import {HttpService} from '../../services/http/http.service';
 import {Observable, Subject} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
-import {DefaultResponse, Sprint} from '../../models/entity.model';
+import {DefaultResponse, ResponseWIthId, ResponseWIthSprint, Sprint} from '../../models/entity.model';
+import {nullDelete} from '../../utils/null-delete';
 
 @Injectable({providedIn: 'root'})
 export class SprintsService implements OnDestroy {
@@ -42,7 +43,16 @@ export class SprintsService implements OnDestroy {
             );
     }
 
+    create(sprint: Sprint): Observable<ResponseWIthSprint> {
+        return this.http.createSprint(nullDelete(sprint))
+            .pipe(
+                tap((response) => {
+                    this.store.updateActive(response.sprint)
+                })
+            );
+    }
+
     resetActive(): void {
-        this.query.hasActive() && this.store.removeActive(this.query.getActive().id);
+        this.query.hasActive() && this.store.setActive(null);
     }
 }

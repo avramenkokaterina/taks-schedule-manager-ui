@@ -6,7 +6,7 @@
                     <span>Team</span>
                 </div>
                 <div class="project-team__header-right">
-                    <button mat-raised-button color="accent">Add User</button>
+                    <button mat-raised-button color="accent" (click)="_manageTeam()">Manage Team</button>
                 </div>
             </div>
             <div class="project-team__table mat-body">
@@ -26,7 +26,7 @@
                     <div class="project-team__column _position">{{user.position}}</div>
                     <div class="project-team__column _email">{{user.email}}</div>
                     <div class="project-team__column _delete">
-                        <svg class="icon-delete">
+                        <svg class="icon-delete" (click)="_delete(user.id)">
                             <use xlink:href="#icon-delete"></use>
                         </svg>
                     </div>

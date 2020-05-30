@@ -4,5 +4,5 @@
     </div>
 </div>
 <ng-container *ngFor="let task of _tasks">
-    <tsm-task-card class="task-column__card" [task]="task"></tsm-task-card>
+    <tsm-task-card class="task-column__card" [task]="task" (click)="_taskClick(task)"></tsm-task-card>
 </ng-container>

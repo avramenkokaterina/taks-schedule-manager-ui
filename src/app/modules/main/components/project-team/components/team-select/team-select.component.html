@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Project Team</h1>
+<div mat-dialog-content class="team-select__wrapper">
+    <mat-form-field>
+        <mat-label>Users</mat-label>
+        <mat-select [compareWith]="_compareFn"
+                    [placeholder]="'Select Users'"
+                    [multiple]="true"
+                    [value]="_value"
+                    (valueChange)="_valueChange($event)">
+            <mat-option *ngFor="let user of _users"
+                        [value]="user">
+                {{user.fullName}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions class="team-select__controls">
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" (click)="_save()">Save</button>
+</div>

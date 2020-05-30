@@ -4,33 +4,46 @@
 </ng-container>
 
 <ng-template #kanbanTemplate let-tasks="tasks" let-sprint="sprint">
-    <ng-container *ngIf="tasks?.length; else errorTemplate">
-        <div class="kanban__widgets"></div>
-        <div class="kanban__sprint">
-            <div class="kanban__sprint-left">
-                <div class="kanban__sprint-name mat-body-strong">{{sprint?.code}} {{sprint?.name}}</div>
-                <svg class="kanban__reload-button" (click)="_reload()">
-                    <use xlink:href="#icon-reload"></use>
-                </svg>
-            </div>
-            <div class="kanban__sprint-right" *ngIf="!sprint?.readonly">
-                <button class="kanban__edit-sprint" mat-raised-button color="accent" (click)="_editSprint()">
-                    Edit Sprint
-                </button>
-                <button class="kanban__plan-sprint" mat-raised-button color="accent" (click)="_startSprint()">
-                    Plan Sprint
-                </button>
-            </div>
+
+    <div class="kanban__widgets"></div>
+    <div class="kanban__sprint">
+        <div class="kanban__sprint-left">
+            <div class="kanban__sprint-name mat-body-strong">{{sprint?.code}} {{sprint?.name}}</div>
+            <svg class="kanban__reload-button" (click)="_reload()">
+                <use xlink:href="#icon-reload"></use>
+            </svg>
         </div>
-        <div class="kanban__tasks">
-            <tsm-task-column *ngFor="let status of _statuses"
-                             class="kanban__task-column"
-                             [tasks]="tasks"
-                             [status]="status"></tsm-task-column>
+        <div class="kanban__sprint-right" *ngIf="!sprint?.readonly">
+            <button class="kanban__edit-sprint" mat-raised-button color="accent" (click)="_editSprint()">
+                Edit Sprint
+            </button>
+            <button class="kanban__plan-sprint" mat-raised-button color="accent" (click)="_startSprint()">
+                Plan Sprint
+            </button>
         </div>
-    </ng-container>
+    </div>
+    <div *ngIf="tasks?.length; else noTasksTemplate" class="kanban__tasks">
+        <tsm-task-column *ngFor="let status of _statuses"
+                         class="kanban__task-column"
+                         [tasks]="tasks"
+                         [status]="status"
+                         (taskClick)="_editTask($event)"></tsm-task-column>
+    </div>
 </ng-template>
 
 <ng-template #errorTemplate>
-    <div class="kanban__error">{{_errorMessage}}</div>
+    <div class="kanban__error">
+        <div class="kanban__error-text mat-h1">{{_errorMessage}}</div>
+        <button class="kanban__create-sprint"
+                *ngIf="_createSprintButton"
+                mat-raised-button
+                color="accent"
+                (click)="_createSprint()">
+            Create Sprint
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #noTasksTemplate>
+    <div class="mat-h1">No Tasks in Project</div>
 </ng-template>

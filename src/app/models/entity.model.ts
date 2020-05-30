@@ -1,12 +1,17 @@
 import {User} from './user.model';
 
 export interface SprintProjectIds {
-    readonly sprintId: number;
+    readonly sprintId?: number;
     readonly projectId: number;
 }
 
 export interface UserProjectIds {
     readonly userId: number;
+    readonly projectId: number;
+}
+
+export interface UsersProjectIds {
+    readonly userIds: number[];
     readonly projectId: number;
 }
 
@@ -73,6 +78,7 @@ export type Task = Readonly<{
     order?: number;
     color?: string;
     userName?: string;
+    actualDuration?: number;
 }>;
 
 export interface UserId {
@@ -88,4 +94,12 @@ export type GanChartInfo = Readonly<{
 
 export interface DefaultResponse {
     readonly response: string;
+}
+
+export interface ResponseWIthId extends DefaultResponse {
+    readonly id: number;
+}
+
+export interface ResponseWIthSprint extends DefaultResponse {
+    readonly sprint: Sprint;
 }

@@ -1,1 +1,30 @@
-<p>tasks works!</p>
+<ng-container *ngIf="!_isLoading; else loading">
+    <ng-container *ngIf="_projectId; else noProject">
+        <div class="tasks__header">
+            <div class="tasks__header-left mat-h1">
+                <span>Project Backlog</span>
+            </div>
+            <div class="tasks__header-right">
+                <button mat-raised-button [disabled]="!_selectedTasks.size" (click)="_deleteSelected()">Delete</button>
+                <button mat-raised-button color="accent" (click)="_createTask()">Create Task</button>
+            </div>
+        </div>
+        <div class="tasks__wrapper">
+            <ng-container *ngIf="_tasks?.length; else noTasks">
+                <tsm-table class="tasks__table" [model]="_model"
+                           (itemsSelect)="_selectTasks($event)"
+                           (itemsUnselect)="_unselectTasks($event)"></tsm-table>
+            </ng-container>
+        </div>
+    </ng-container>
+</ng-container>
+
+<ng-template #noProject>
+    <div class="mat-h1">No Project Selected</div>
+</ng-template>
+<ng-template #noTasks>
+    <div class="mat-h1">No Tasks in Project</div>
+</ng-template>
+<ng-template #loading>
+    <div class="mat-h1">Loading...</div>
+</ng-template>

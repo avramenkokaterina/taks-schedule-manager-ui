@@ -9,7 +9,7 @@
     </div>
 </div>
 <div class="table__row mat-body" *ngFor="let row of model.rows" [ngClass]="row?.styleClass">
-    <div class="table__column _checkbox">
+    <div class="table__column _checkbox" [class._hidden]="!checkboxes">
         <mat-checkbox [checked]="row?.selected"
                       [ngClass]="row.styleClass"
                       (change)="_selectedChange(row.id, $event.checked)"></mat-checkbox>

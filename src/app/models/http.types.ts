@@ -22,7 +22,8 @@ export enum RemoteProceduresNames {
     status = 'status',
     unassignUser = 'unassignUser',
     usersByProject = 'usersByProject',
-    usersNotInProject = 'usersNotInProject'
+    usersNotInProject = 'usersNotInProject',
+    deleteTasks = 'deleteTasks'
 }
 
 export type HttpServiceType = {

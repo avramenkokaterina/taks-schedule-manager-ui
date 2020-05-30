@@ -85,33 +85,34 @@ export class GanChartComponent implements OnInit, OnDestroy {
     }
 
     private intervalToModel(start: string, end: string): AxisModel {
-        const startDate = dayjs(start);
-        const endDate = dayjs(end);
+        const startDate = start && dayjs(start);
+        const endDate = end && dayjs(end);
         let tempDate = startDate;
 
         let weeks: AxisWeek[] = [];
         let days: AxisDay[] = [];
-        while (!tempDate.isAfter(endDate, 'day')) {
-            const dayOfWeek = tempDate.weekday();
-            if (!((dayOfWeek === 6) || (dayOfWeek === 5))) {
-                if (dayOfWeek === 0) {
-                    if (days.length) {
-                        weeks.push({
-                            days: days,
-                            title: days[0].value.format('ddd DD MMM YYYY')
-                        });
-                        days = [];
+        if (tempDate && endDate) {
+            while (!tempDate.isAfter(endDate, 'day')) {
+                const dayOfWeek = tempDate.weekday();
+                if (!((dayOfWeek === 6) || (dayOfWeek === 5))) {
+                    if (dayOfWeek === 0) {
+                        if (days.length) {
+                            weeks.push({
+                                days: days,
+                                title: days[0].value.format('ddd DD MMM YYYY')
+                            });
+                            days = [];
+                        }
                     }
+                    days.push({
+                        isToday: tempDate.isSame(dayjs(), 'day'),
+                        value: tempDate,
+                        title: tempDate.format('dd')
+                    });
                 }
-                days.push({
-                    isToday: tempDate.isSame(dayjs(), 'day'),
-                    value: tempDate,
-                    title: tempDate.format('dd')
-                });
+                tempDate = tempDate.add(1, 'day');
             }
-            tempDate = tempDate.add(1, 'day');
         }
-
         return {
             weeks: weeks
         };
