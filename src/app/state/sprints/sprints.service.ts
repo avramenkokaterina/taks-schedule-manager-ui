@@ -3,7 +3,7 @@ import {SprintsQuery} from './sprints.query';
 import {SprintsStore} from './sprints.store';
 import {HttpService} from '../../services/http/http.service';
 import {Observable, Subject} from 'rxjs';
-import {takeUntil, tap} from 'rxjs/operators';
+import {finalize, takeUntil, tap} from 'rxjs/operators';
 import {DefaultResponse, ResponseWIthId, ResponseWIthSprint, Sprint} from '../../models/entity.model';
 import {nullDelete} from '../../utils/null-delete';
 
@@ -23,8 +23,10 @@ export class SprintsService implements OnDestroy {
     }
 
     fetchActiveById(sprintId: number): void {
+        this.store.setLoading(true);
         this.http.sprintById({sprintId})
             .pipe(
+                finalize(() => this.store.setLoading(false)),
                 takeUntil(this.destroyStream$)
             )
             .subscribe((sprint) => {

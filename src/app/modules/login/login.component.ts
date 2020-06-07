@@ -1,6 +1,7 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AppService} from '../../state/app/app.service';
+import {AppQuery} from '../../state/app/app.query';
 
 @Component({
     selector: 'tsm-login',
@@ -16,10 +17,14 @@ export class TSMLoginComponent implements OnInit {
         password: new FormControl(null, Validators.required)
     })
 
-    constructor(private appService: AppService) {
+    constructor(private appService: AppService,
+                private appQuery: AppQuery) {
     }
 
     ngOnInit(): void {
+        if (this.appQuery.userId) {
+            this.appService.signOut();
+        }
     }
 
     _login(): void {

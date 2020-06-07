@@ -4,7 +4,7 @@ import {ProjectsStore} from './projects.store';
 import {HttpService} from '../../services/http/http.service';
 import {AppQuery} from '../app/app.query';
 import {Observable, Subject} from 'rxjs';
-import {takeUntil, tap} from 'rxjs/operators';
+import {finalize, takeUntil, tap} from 'rxjs/operators';
 import {DefaultResponse, Project} from '../../models/entity.model';
 import {nullDelete} from '../../utils/null-delete';
 import {TasksStore} from '../tasks/tasks.store';
@@ -23,13 +23,18 @@ export class ProjectsService implements OnDestroy {
                 private sprintsStore: SprintsStore) {
     }
 
-    fetch(): void {
+    fetch(selected?: number): void {
+        this.sprintsStore.setLoading(true);
         this.http.projectsByUser({userId: this.appQuery.userId})
             .pipe(
+                finalize(() => this.projectsStore.setLoading(false)),
                 takeUntil(this.destroyStream$)
             )
             .subscribe((value) => {
                 this.projectsStore.set(value);
+                if (selected) {
+                    this.setSelected(selected);
+                }
             });
     }
 
@@ -56,7 +61,7 @@ export class ProjectsService implements OnDestroy {
                 takeUntil(this.destroyStream$),
                 tap(() => {
                     if (project.id === (this.projectsQuery.selected && this.projectsQuery.selected.id)) {
-                        this.setSelected(project.id)
+                        this.setSelected(project.id);
                     }
                     this.fetch();
                 })

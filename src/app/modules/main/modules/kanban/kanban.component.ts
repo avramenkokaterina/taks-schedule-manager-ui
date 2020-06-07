@@ -84,6 +84,15 @@ export class KanbanComponent implements OnInit, OnDestroy {
         this.tasksService.fetchBySprintId(this.sprintId);
     }
 
+    _endSprint(): void {
+        this.http.endSprint({sprintId: this.sprintId})
+            .subscribe(() => {
+                this._isError = true;
+                this._errorMessage = 'No active sprint in project';
+                this._createSprintButton = true;
+            })
+    }
+
     _editSprint(): void {
         this.matDialog.open(SprintEditComponent, {
             data: {

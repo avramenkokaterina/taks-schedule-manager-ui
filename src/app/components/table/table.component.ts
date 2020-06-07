@@ -23,7 +23,6 @@ export class TableComponent implements OnChanges {
     private selectedCount = 0;
 
     constructor() {
-        window['aaa'] = this;
     }
 
     ngOnChanges(changes: SimpleChanges) {

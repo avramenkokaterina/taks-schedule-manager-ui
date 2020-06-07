@@ -1,5 +1,5 @@
 <div class="auth__wrapper">
-    <div class="auth__header mat-h4">Member Login</div>
+    <div class="auth__header mat-h4">Login</div>
     <form class="auth__form" [formGroup]="_formGroup">
         <mat-form-field class="auth__field">
             <mat-label class="auth__label">Login</mat-label>
@@ -16,4 +16,8 @@
             [textContent]="'Sign In'"
             [disabled]="_formGroup.invalid"
             (click)="_login()"></button>
+    <a class="auth__back-button"
+       mat-button
+       [routerLink]="'/create-account'"
+       [textContent]="'Create Account'"></a>
 </div>

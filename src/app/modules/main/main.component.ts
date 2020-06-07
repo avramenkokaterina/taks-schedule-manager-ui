@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {RouterTabItem} from '../../components/router-tabs/router-tabs.types';
 import {ProjectsService} from '../../state/projects/projects.service';
 import {SprintsService} from '../../state/sprints/sprints.service';
@@ -10,7 +10,7 @@ import {ActivatedRoute} from '@angular/router';
     templateUrl: './main.component.html',
     styleUrls: ['./main.component.css']
 })
-export class TSMMainComponent implements OnInit {
+export class TSMMainComponent implements OnInit, OnDestroy {
 
     _tabItems: RouterTabItem[] = [
         {
@@ -45,7 +45,15 @@ export class TSMMainComponent implements OnInit {
         }
     ];
 
-    private destroyStream = new Subject();
+    _tabBottomItems: RouterTabItem[] = [
+        {
+            id: 'logout',
+            link: '/auth',
+            iconName: 'circle'
+        }
+    ];
+
+    private destroyStream$ = new Subject();
 
     constructor(private sprintsService: SprintsService,
                 private route: ActivatedRoute) {
@@ -55,5 +63,10 @@ export class TSMMainComponent implements OnInit {
     ngOnInit() {
         const sprintId = this.route.snapshot.queryParamMap.get('sprintId');
         sprintId && this.sprintsService.fetchActiveById(parseInt(sprintId, 10));
+    }
+
+    ngOnDestroy() {
+        this.destroyStream$.next();
+        this.destroyStream$.complete();
     }
 }

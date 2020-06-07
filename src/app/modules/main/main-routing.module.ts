@@ -15,27 +15,27 @@ const routes: Routes = [
             },
             {
                 path: 'gan-chart',
-                loadChildren: () => import('./components/gan-chart/gan-chart.module').then(value => value.GanChartModule)
+                loadChildren: () => import('./modules/gan-chart/gan-chart.module').then(value => value.GanChartModule)
             },
             {
                 path: 'projects',
-                loadChildren: () => import('./components/projects/projects.module').then(value => value.ProjectsModule)
+                loadChildren: () => import('./modules/projects/projects.module').then(value => value.ProjectsModule)
             },
             {
                 path: 'kanban',
-                loadChildren: () => import('./components/kanban/kanban.module').then(value => value.KanbanModule)
+                loadChildren: () => import('./modules/kanban/kanban.module').then(value => value.KanbanModule)
             },
             {
                 path: 'project-team',
-                loadChildren: () => import('./components/project-team/project-team.module').then(value => value.ProjectTeamModule)
+                loadChildren: () => import('./modules/project-team/project-team.module').then(value => value.ProjectTeamModule)
             },
             {
                 path: 'statistic',
-                loadChildren: () => import('./components/statistic/statistic.module').then(value => value.StatisticModule)
+                loadChildren: () => import('./modules/statistic/statistic.module').then(value => value.StatisticModule)
             },
             {
                 path: 'tasks',
-                loadChildren: () => import('./components/tasks/tasks.module').then(value => value.TasksModule)
+                loadChildren: () => import('./modules/tasks/tasks.module').then(value => value.TasksModule)
             },
             {
                 path: '**',

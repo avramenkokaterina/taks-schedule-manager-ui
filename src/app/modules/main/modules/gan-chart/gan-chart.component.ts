@@ -57,7 +57,6 @@ export class GanChartComponent implements OnInit, OnDestroy {
                 private route: ActivatedRoute,
                 private router: Router,
                 private cdr: ChangeDetectorRef) {
-        window['aaa'] = this;
     }
 
     ngOnInit(): void {
@@ -95,7 +94,12 @@ export class GanChartComponent implements OnInit, OnDestroy {
             while (!tempDate.isAfter(endDate, 'day')) {
                 const dayOfWeek = tempDate.weekday();
                 if (!((dayOfWeek === 6) || (dayOfWeek === 5))) {
-                    if (dayOfWeek === 0) {
+                    days.push({
+                        isToday: tempDate.isSame(dayjs(), 'day'),
+                        value: tempDate,
+                        title: tempDate.format('dd')
+                    });
+                    if (dayOfWeek === 4) {
                         if (days.length) {
                             weeks.push({
                                 days: days,
@@ -104,11 +108,6 @@ export class GanChartComponent implements OnInit, OnDestroy {
                             days = [];
                         }
                     }
-                    days.push({
-                        isToday: tempDate.isSame(dayjs(), 'day'),
-                        value: tempDate,
-                        title: tempDate.format('dd')
-                    });
                 }
                 tempDate = tempDate.add(1, 'day');
             }

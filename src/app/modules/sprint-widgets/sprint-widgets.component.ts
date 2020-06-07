@@ -36,7 +36,6 @@ export class SprintWidgetsComponent implements OnChanges {
     _models: WidgetModel[] = [];
 
     constructor() {
-        window['aaa'] = this;
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -86,8 +85,8 @@ export class SprintWidgetsComponent implements OnChanges {
                     color: '#F2CC8F',
                     iconId: 'big-calendar',
                     label: 'days',
-                    name: 'sprint suration',
-                    currentCount: dayjs(this.sprint.endDate).diff(dayjs(this.sprint.endDate), 'day')
+                    name: 'sprint duration',
+                    currentCount: dayjs(this.sprint.endDate).diff(dayjs(this.sprint.startDate), 'day')
                 }
             );
         }

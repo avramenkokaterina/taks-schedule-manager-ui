@@ -8,7 +8,9 @@ import {RouterTabItem} from './router-tabs.types';
 })
 export class RouterTabsComponent {
 
-    @Input() items: RouterTabItem[];
+    @Input() itemsTop: RouterTabItem[];
+
+    @Input() itemsBottom: RouterTabItem[];
 
     @Output() valueChange: EventEmitter<RouterTabItem>;
 

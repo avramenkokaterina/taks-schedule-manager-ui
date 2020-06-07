@@ -85,10 +85,12 @@ export class SprintEditComponent implements OnInit, OnDestroy {
 
     _selectTasks(ids: number[]): void {
         ids.forEach(id => this.selectedTasks.add(id));
+        this._metrics = this.getStatisticParams(this._tasks.filter(task => this.selectedTasks.has(task.id)));
     }
 
     _unselectTasks(ids: number[]): void {
         ids.forEach(id => this.selectedTasks.delete(id));
+        this._metrics = this.getStatisticParams(this._tasks.filter(task => this.selectedTasks.has(task.id)));
     }
 
     private getSprint(): Sprint {

@@ -1,0 +1,44 @@
+<div class="register__wrapper">
+    <div class="register__header mat-h4">Registration</div>
+    <form class="register__form" [formGroup]="_formGroup">
+        <mat-form-field class="register__field">
+            <mat-label class="register__label">Login</mat-label>
+            <input formControlName="login" matInput type="text">
+        </mat-form-field>
+        <mat-form-field class="register__field">
+            <mat-label class="register__label">Email</mat-label>
+            <input formControlName="email" matInput type="email">
+        </mat-form-field>
+        <mat-form-field class="register__field">
+            <mat-label class="register__label">Password</mat-label>
+            <input formControlName="password" matInput type="password">
+        </mat-form-field>
+        <mat-form-field class="register__field">
+            <mat-label class="register__label">Full Name</mat-label>
+            <input formControlName="fullName" matInput type="text">
+        </mat-form-field>
+        <mat-form-field class="register__field">
+            <mat-label>Position</mat-label>
+            <mat-select formControlName="position">
+                <mat-option *ngFor="let position of _positions"
+                            [value]="position">{{position}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <label class="register__field color-pick">
+            <div class="mat-caption color-pick__label">Choose your Color</div>
+            <input [(colorPicker)]="_color"
+                   [cpOutputFormat]="'hex'"
+                   [style.background]="_color"/>
+        </label>
+    </form>
+    <button class="register__sign-in-button"
+            mat-raised-button
+            color="primary"
+            [textContent]="'Sign Up'"
+            [disabled]="_formGroup.invalid"
+            (click)="_register()"></button>
+    <a class="register__back-button"
+       mat-button
+       [routerLink]="'/auth'"
+       [textContent]="'Back to Login'"></a>
+</div>

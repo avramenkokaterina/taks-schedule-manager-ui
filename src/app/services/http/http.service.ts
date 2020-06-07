@@ -18,7 +18,7 @@ export class HttpService extends HttpAbstractService {
             this[procedure] = function(args) {
                 return self.http.post(`api/${procedure}`, args)
                     .pipe(
-                        catchError(self.handleError)
+                        catchError(err => self.handleError(err))
                     );
             }
         });

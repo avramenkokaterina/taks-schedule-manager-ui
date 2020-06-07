@@ -1,11 +1,24 @@
 <div class="router-tabs__tabs">
-    <div *ngFor="let item of items"
-         class="router-tabs__tab"
-         [routerLink]="item.link"
-         [routerLinkActive]="'_selected'">
-        <svg class="router-tabs__tab-icon icon-{{item.iconName}}">
-            <use [attr.xlink:href]="'#icon-' + item.iconName"></use>
-        </svg>
+    <div class="router-tabs__top">
+        <div *ngFor="let item of itemsTop"
+             class="router-tabs__tab"
+             [routerLink]="item.link"
+             [queryParamsHandling]="'merge'"
+             [routerLinkActive]="'_selected'">
+            <svg class="router-tabs__tab-icon icon-{{item.iconName}}">
+                <use [attr.xlink:href]="'#icon-' + item.iconName"></use>
+            </svg>
+        </div>
+    </div>
+    <div class="router-tabs__bottom">
+        <div *ngFor="let item of itemsBottom"
+             class="router-tabs__tab"
+             [routerLink]="item.link"
+             [routerLinkActive]="'_selected'">
+            <svg class="router-tabs__tab-icon icon-{{item.iconName}}">
+                <use [attr.xlink:href]="'#icon-' + item.iconName"></use>
+            </svg>
+        </div>
     </div>
 </div>
 <div class="router-tabs__content">

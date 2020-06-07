@@ -26,7 +26,4 @@ const routes: Routes = [
     ]
 })
 export class TSMLoginModule {
-    constructor() {
-        console.log('aaaaaa');
-    }
 }

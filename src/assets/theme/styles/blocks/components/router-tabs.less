@@ -6,8 +6,19 @@
   &__tabs {
     background-color: @blue-2e;
     display: flex;
+    justify-content: space-between;
     flex-direction: column;
     padding: 32px 7px 20px 0;
+  }
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &_bottom {
+    display: flex;
+    flex-direction: column;
   }
 
   &__tab {
@@ -48,4 +59,10 @@
     overflow-y: scroll;
   }
 
+}
+
+.icon-circle {
+  fill: #C4C4C4;
+  width: 29px;
+  height: 29px;
 }

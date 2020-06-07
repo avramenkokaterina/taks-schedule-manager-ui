@@ -3,7 +3,7 @@ import {TasksQuery} from './tasks.query';
 import {TasksStore} from './tasks.store';
 import {HttpService} from '../../services/http/http.service';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {finalize, takeUntil} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class TasksService implements OnDestroy {
@@ -16,8 +16,10 @@ export class TasksService implements OnDestroy {
     }
 
     fetchBySprintId(sprintId: number): void {
+        this.store.setLoading(true);
         this.http.getTasksBySprint({sprintId})
             .pipe(
+                finalize(() => this.store.setLoading(false)),
                 takeUntil(this.destroyStream$)
             )
             .subscribe((tasks) => {

@@ -11,7 +11,7 @@ export function appBootstrap(cookieService: CookieService,
             console.log('Redirect to login');
             router.navigate(['auth']);
         } else {
-            appService.setUserId(parseInt(cookieService.get(USER_ID_NAME), 10))
+            appService.setUserId(parseInt(cookieService.get(USER_ID_NAME), 10));
         }
         resolve();
     });

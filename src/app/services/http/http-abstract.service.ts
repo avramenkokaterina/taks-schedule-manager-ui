@@ -5,14 +5,16 @@ import {
     DefaultResponse,
     GanChartInfo,
     Project,
-    ProjectId, ResponseWIthId, ResponseWIthSprint,
+    ProjectId,
+    ResponseWIthSprint,
     Sprint,
     SprintId,
     SprintProjectIds,
     SprintTaskIds,
     Task,
     UserId,
-    UserProjectIds, UsersProjectIds
+    UserProjectIds,
+    UsersProjectIds
 } from '../../models/entity.model';
 import {User} from '../../models/user.model';
 
@@ -34,7 +36,7 @@ export abstract class HttpAbstractService implements HttpServiceType {
     abstract getTasksByProject(projectId: ProjectId): Observable<Task[]>;
     abstract getTasksBySprint(sprintId: SprintId): Observable<Task[]>;
     abstract projectsByUser(userId: UserId): Observable<Project[]>;
-    abstract registerUser(credential: Credential): Observable<DefaultResponse>;
+    abstract registerUser(user: User): Observable<DefaultResponse>;
     abstract sprintById(sprintId: SprintId): Observable<Sprint>;
     abstract sprintGanChart(sprintId: SprintId): Observable<GanChartInfo[]>;
     abstract status(): Observable<DefaultResponse>;
@@ -42,4 +44,6 @@ export abstract class HttpAbstractService implements HttpServiceType {
     abstract usersByProject(projectId: ProjectId): Observable<User[]>;
     // TODO: check returnType
     abstract usersNotInProject(projectId: ProjectId): Observable<User[]>;
+    abstract endSprint(sprintId: SprintId): Observable<DefaultResponse>;
+    abstract signOut(): Observable<DefaultResponse>;
 }
