@@ -14,6 +14,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ParametersPanelModule} from '../../../../components/parameters-panel/parameters-panel.module';
 import {TableModule} from '../../../../components/table/table.module';
 import {TaskEditModule} from '../../../task-edit/task-edit.module';
+import {SprintWidgetsModule} from '../../../sprint-widgets/sprint-widgets.module';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import {TaskEditModule} from '../../../task-edit/task-edit.module';
         MatDatepickerModule,
         ParametersPanelModule,
         TableModule,
-        TaskEditModule
+        TaskEditModule,
+        SprintWidgetsModule
     ]
 })
 export class KanbanModule {

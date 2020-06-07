@@ -5,7 +5,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import * as dayjs from 'dayjs';
 import {ParametersPanelModel} from '../../../../../components/parameters-panel/parameters-panel.model';
 import {TableModel, TableRow} from '../../../../../components/table/table.model';
-import {Task} from '../../../../../models/entity.model'
+import {Task} from '../../../../../models/entity.model';
 import {HttpService} from '../../../../../services/http/http.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -59,12 +59,16 @@ export class SprintEditComponent implements OnInit, OnDestroy {
 
         this._sprint = this.data && this.data.sprint;
 
-        this.http.getProjectBacklogTasks({projectId: this.data.projectId ?? this.data.sprint.projectId, sprintId: this._sprint && this._sprint.id})
+        this.http.getProjectBacklogTasks({
+            projectId: this.data.projectId ?? this.data.sprint.projectId,
+            sprintId: this._sprint && this._sprint.id
+        })
             .pipe(takeUntil(this.destroyStream$))
             .subscribe((tasks) => {
                 this._tasks = tasks;
                 tasks.forEach((task) => this._sprint && (task.sprintId === this._sprint.id) && this.selectedTasks.add(task.id));
                 this._taskTableModel = this.tasksToTable(tasks);
+                this._metrics = this.getStatisticParams(tasks.filter(task => this.selectedTasks.has(task.id)));
             });
 
         if (this._sprint) {
@@ -91,12 +95,33 @@ export class SprintEditComponent implements OnInit, OnDestroy {
         return {
             ...this._formGroup.value,
             startDate: this._formGroup.value.startDate && dayjs(this._formGroup.value.startDate).format(),
-            endDate: this._formGroup.value.endDate && dayjs(this._formGroup.value.dueDate).format()
+            endDate: this._formGroup.value.endDate && dayjs(this._formGroup.value.endDate).format()
         };
     }
 
     _save(): void {
         this.data.onSave(this.getSprint(), this.selectedTasks);
+    }
+
+    private getStatisticParams(tasks: Task[] = []): ParametersPanelModel[] {
+        return [
+            {
+                label: 'Total Tasks',
+                value: String(tasks.length)
+            },
+            {
+                label: 'Total Story Points',
+                value: String(tasks.reduce((result, task) => {
+                    return result + (task.storyPoints ?? 0);
+                }, 0))
+            },
+            {
+                label: 'Total expected duration',
+                value: String(tasks.reduce((result, task) => {
+                    return result + (task.estimate ?? 0);
+                }, 0))
+            }
+        ];
     }
 
     private tasksToTable(tasks: Task[]): TableModel {

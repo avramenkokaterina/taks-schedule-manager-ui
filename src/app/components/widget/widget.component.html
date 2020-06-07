@@ -1,0 +1,14 @@
+<svg class="icon" [style.fill]="color">
+    <use [attr.xlink:href]="'#icon-' + iconId"></use>
+</svg>
+<div class="data mat-body">
+    <div class="data__up">
+        <div class="data__current mat-h1">{{currentCount}}</div>
+        <div class="dara__total" *ngIf="totalCount">/{{totalCount}}</div>
+        &nbsp;
+        <div class="data__label">{{label}}</div>
+    </div>
+    <div class="data__down mat-body-strong" [style.color]="color">
+        {{name}}
+    </div>
+</div>

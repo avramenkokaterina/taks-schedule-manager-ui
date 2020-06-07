@@ -75,7 +75,7 @@ export type Task = Readonly<{
     description?: string;
     name: string;
     code: string;
-    order?: number;
+    orderNumber?: number;
     color?: string;
     userName?: string;
     actualDuration?: number;

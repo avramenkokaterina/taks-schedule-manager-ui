@@ -3,9 +3,13 @@
                   [ngTemplateOutletContext]="{tasks: _tasks$ | async, sprint: _activeSprint$ | async}"></ng-container>
 </ng-container>
 
-<ng-template #kanbanTemplate let-tasks="tasks" let-sprint="sprint">
-
-    <div class="kanban__widgets"></div>
+<ng-template #kanbanTemplate
+             let-tasks="tasks"
+             let-sprint="sprint">
+    <tsm-sprint-widgets class="kanban__widgets"
+                        [isKanban]="true"
+                        [tasks]="tasks"
+                        [sprint]="sprint"></tsm-sprint-widgets>
     <div class="kanban__sprint">
         <div class="kanban__sprint-left">
             <div class="kanban__sprint-name mat-body-strong">{{sprint?.code}} {{sprint?.name}}</div>
