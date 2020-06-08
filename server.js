@@ -4,7 +4,8 @@ const proxy = require('http-proxy-middleware').createProxyMiddleware;
 const apiProxy = proxy('/api',
     {
         target: 'https://task-schedule-manager.herokuapp.com',
-        changeOrigin: true
+        changeOrigin: true,
+        cookieDomainRewrite: "localhost"
     });
 
 const app = express();
