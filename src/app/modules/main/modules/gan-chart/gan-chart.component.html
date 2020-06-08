@@ -1,69 +1,77 @@
+<tsm-project-header></tsm-project-header>
 <ng-container [ngTemplateOutlet]="chart"
-              [ngTemplateOutletContext]="{axis: _axisModel | async, sprint: _sprint$ | async}">
+              [ngTemplateOutletContext]="{axis: _axisModel | async, sprint: _sprint$ | async, loading: (_sprintLoading$ | async) || _infoLoading}">
 </ng-container>
+<ng-template #chart let-axis="axis" let-sprint="sprint" let-isLoading="loading">
+    <ng-container *ngIf="!isLoading; else loading">
+        <ng-container *ngIf="sprint; else noData">
+            <div class="gan-chart__header">
+                <div class="gan-chart__header-text mat-h2">Sprint Gantt Chart</div>
+                <svg class="reload-button" (click)="_load()">
+                    <use xlink:href="#icon-reload"></use>
+                </svg>
+            </div>
+            <div class="gan-chart__chart mat-body">
+                <div class="gan-chart__row _header">
+                    <div class="gan-chart__column-name _header gan-chart__column mat-h4">
+                        <span class="gan-chart__sprint-name">{{sprint?.name}}</span>
 
-<ng-template #chart let-axis="axis" let-sprint="sprint">
-    <ng-container *ngIf="sprint; else noData">
-        <div class="gan-chart__header">
-            <div class="gan-chart__header-text mat-h3">Sprint Gantt Chart</div>
-            <svg class="reload-button" (click)="_load()">
-                <use xlink:href="#icon-reload"></use>
-            </svg>
-        </div>
-        <div class="gan-chart__chart mat-body">
-            <div class="gan-chart__row _header">
-                <div class="gan-chart__column-name _header gan-chart__column mat-h4">
-                    <span class="gan-chart__sprint-name">{{sprint?.name}}</span>
-
-                </div>
-                <div class="gan-chart__column-progress gan-chart__column">
-                    <span class="gan-chart__progress">Progress</span>
-                </div>
-                <div *ngFor="let week of axis?.weeks" class="gan-chart__column-week gan-chart__column mat-h4">
-                    <div class="gan-chart__week-title-wrapper">
-                        <span class="gan-chart__week-title">{{week.title}}</span>
                     </div>
-                    <div class="gan-chart__week-days">
-                        <div class="gan-chart__day-wrapper"
-                             *ngFor="let day of week.days">
-                            <div class="gan-chart__day-title-wrapper">
-                                <span class="gan-chart__day-title" [class._selected]="day.isToday">{{day.title}}</span>
-                            </div>
-                            <div class="gan-chart__day-halves" [style.width]="_dayWidthPx">
-                                <div class="gan-chart__day-half"></div>
-                                <div class="gan-chart__day-half"></div>
+                    <div class="gan-chart__column-progress gan-chart__column">
+                        <span class="gan-chart__progress">Progress</span>
+                    </div>
+                    <div *ngFor="let week of axis?.weeks" class="gan-chart__column-week gan-chart__column mat-h4">
+                        <div class="gan-chart__week-title-wrapper">
+                            <span class="gan-chart__week-title">{{week.title}}</span>
+                        </div>
+                        <div class="gan-chart__week-days">
+                            <div class="gan-chart__day-wrapper"
+                                 *ngFor="let day of week.days">
+                                <div class="gan-chart__day-title-wrapper">
+                                    <span class="gan-chart__day-title" [class._selected]="day.isToday">{{day.title}}</span>
+                                </div>
+                                <div class="gan-chart__day-halves" [style.width]="_dayWidthPx">
+                                    <div class="gan-chart__day-half"></div>
+                                    <div class="gan-chart__day-half"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="gan-chart__row" *ngFor="let data of _chartModel">
-                <div class="gan-chart__column-name _body gan-chart__column">
-                    <div class="gan-chart__color-circle" [style.background-color]="data.user.color"></div>
-                    <div class="gan-chart__user-name">{{data.user.fullName}}</div>
-                </div>
-                <div class="gan-chart__column-progress gan-chart__column mat-h1">
-                    <span class="gan-chart__progress">{{data.completed || 0}} / {{data.total || 0}}</span>
-                </div>
-                <div class="gan-chart__task-row gan-chart__column">
-                    <ng-container *ngFor="let task of data.tasks">
-                        <div class="gan-chart__task-wrapper"
-                             *ngIf="task.estimate"
-                             [style.width.px]="task.estimate * _hourWidth">
-                            <div class="gan-chart__task"
-                                 [ngStyle]="{'border-color': data.user.color, 'background-color': data.user.color + '33'}">
-                                <span class="gan-chart__task-code mat-body-strong">{{task.code}}</span>
-                                <span class="gan-chart__task-dd mat-small">DD: {{task.dueDate | date : 'MMM dd'}}</span>
-                                <span class="gan-chart__task-progress mat-small">{{_labelByStatus[task.status]}}</span>
+                <div class="gan-chart__row" *ngFor="let data of _chartModel">
+                    <div class="gan-chart__column-name _body gan-chart__column">
+                        <div class="gan-chart__color-circle" [style.background-color]="data.user.color"></div>
+                        <div class="gan-chart__user-name">{{data.user.fullName}}</div>
+                    </div>
+                    <div class="gan-chart__column-progress gan-chart__column mat-h1">
+                        <span class="gan-chart__progress">{{data.completed || 0}} / {{data.total || 0}}</span>
+                    </div>
+                    <div class="gan-chart__task-row gan-chart__column">
+                        <ng-container *ngFor="let task of data.tasks">
+                            <div class="gan-chart__task-wrapper"
+                                 *ngIf="task.estimate"
+                                 [style.width.px]="task.estimate * _hourWidth">
+                                <div class="gan-chart__task"
+                                     [ngStyle]="{'border-color': data.user.color, 'background-color': data.user.color + '33'}">
+                                    <span class="gan-chart__task-code mat-body-strong">{{task.code}}</span>
+                                    <span class="gan-chart__task-dd mat-small">DD: {{task.dueDate | date : 'MMM dd'}}</span>
+                                    <span class="gan-chart__task-progress mat-small">{{_labelByStatus[task.status]}}</span>
+                                </div>
                             </div>
-                        </div>
-                    </ng-container>
+                        </ng-container>
+                    </div>
                 </div>
             </div>
-        </div>
+        </ng-container>
     </ng-container>
 </ng-template>
 
 <ng-template #noData>
-    <div class="no-data mat-h1">No active sprint selected</div>
+    <div class="no-data mat-h2">No active sprint</div>
+</ng-template>
+
+<ng-template #loading>
+    <div class="loader-wrapper">
+        <mat-spinner class="loader"></mat-spinner>
+    </div>
 </ng-template>

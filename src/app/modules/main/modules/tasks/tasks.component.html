@@ -1,7 +1,8 @@
+<tsm-project-header></tsm-project-header>
 <ng-container *ngIf="!_isLoading; else loading">
     <ng-container *ngIf="_projectId; else noProject">
         <div class="tasks__header">
-            <div class="tasks__header-left mat-h1">
+            <div class="tasks__header-left mat-h2">
                 <span>Project Backlog</span>
             </div>
             <div class="tasks__header-right">
@@ -20,11 +21,12 @@
 </ng-container>
 
 <ng-template #noProject>
-    <div class="mat-h1">No Project Selected</div>
 </ng-template>
 <ng-template #noTasks>
     <div class="mat-h3">No Tasks in Project Backlog</div>
 </ng-template>
 <ng-template #loading>
-    <div class="mat-h1">Loading...</div>
+    <div class="loader-wrapper">
+        <mat-spinner class="loader"></mat-spinner>
+    </div>
 </ng-template>

@@ -1,0 +1,19 @@
+<ng-container [ngTemplateOutlet]="template"
+              [ngTemplateOutletContext]="{project: _project$ | async, loading: _loading$ | async}"></ng-container>
+<ng-template #template let-project="project" let-isLoading="loading">
+    <ng-container *ngIf="!isLoading; else loading">
+        <ng-container *ngIf="project; else noProject">
+            <div class="mat-h1"><span [style.color]="'gray'">Project: </span>{{project.name}} ({{project.code}})</div>
+        </ng-container>
+    </ng-container>
+</ng-template>
+<ng-template #loading>
+    <div class="loader-wrapper">
+        <mat-spinner class="loader"></mat-spinner>
+    </div>
+</ng-template>
+<ng-template #noProject>
+    <div class="mat-h1">
+        No Project Selected
+    </div>
+</ng-template>

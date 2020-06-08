@@ -1,36 +1,46 @@
+<tsm-project-header></tsm-project-header>
 <ng-container [ngTemplateOutlet]="statistic"
-              [ngTemplateOutletContext]="{sprint: _sprint$ | async, tasks: _tasks$ | async, users: _users$ | async}">
+              [ngTemplateOutletContext]="{sprint: _sprint$ | async, tasks: _tasks$ | async,
+                                          users: _users$ | async, isLoading: (_sprintLoading$ | async) || _tasksLoading || _usersLoading}">
 </ng-container>
-<ng-template #statistic let-sprint="sprint" let-tasks="tasks" let-users="users">
-    <ng-container *ngIf="sprint; else noSprint">
-        <ng-container *ngIf="tasks?.length; else noTasks">
-            <div class="statistic__header mat-h1">Statistic</div>
-            <tsm-sprint-widgets class="statistic__widgets"
-                                [isKanban]="false"
-                                [sprint]="sprint"
-                                [tasks]="tasks"></tsm-sprint-widgets>
-            <ng-container *ngIf="users?.length; else noUsers">
-                <div class="statistic__charts">
-                    <tsm-time-statistic class="statistic__chart"
-                                        [tasks]="tasks"
-                                        [users]="users"></tsm-time-statistic>
-                    <tsm-tasks-statistic class="statistic__chart"
-                                         [tasks]="tasks"
-                                         [users]="users"></tsm-tasks-statistic>
-                    <tsm-overdue-statistic class="statistic__chart"
-                                        [tasks]="tasks"
-                                        [users]="users"></tsm-overdue-statistic>
-                </div>
+<ng-template #statistic let-sprint="sprint" let-tasks="tasks" let-users="users" let-isLoading="isLoading">
+    <ng-container *ngIf="!isLoading; else loading">
+        <ng-container *ngIf="sprint; else noSprint">
+            <ng-container *ngIf="tasks?.length; else noTasks">
+                <div class="statistic__header mat-h2">Statistic</div>
+                <tsm-sprint-widgets class="statistic__widgets"
+                                    [isKanban]="false"
+                                    [sprint]="sprint"
+                                    [tasks]="tasks"></tsm-sprint-widgets>
+                <ng-container *ngIf="users?.length; else noUsers">
+                    <div class="statistic__charts">
+                        <tsm-time-statistic class="statistic__chart"
+                                            [tasks]="tasks"
+                                            [users]="users"></tsm-time-statistic>
+                        <tsm-tasks-statistic class="statistic__chart"
+                                             [tasks]="tasks"
+                                             [users]="users"></tsm-tasks-statistic>
+                        <tsm-overdue-statistic class="statistic__chart"
+                                               [tasks]="tasks"
+                                               [users]="users"></tsm-overdue-statistic>
+                    </div>
+                </ng-container>
             </ng-container>
         </ng-container>
     </ng-container>
 </ng-template>
 <ng-template #noTasks>
-    <div class="mat-h1">No Tasks in Sprint</div>
+    <div class="mat-h2">No Tasks in Sprint</div>
 </ng-template>
 <ng-template #noSprint>
-    <div class="mat-h1">No Sprint Selected</div>
+    <div class="mat-h2">No Active Sprint</div>
 </ng-template>
 <ng-template #noUsers>
-    <div class="mat-h1">No Users</div>
+    <div class="mat-h2">No Users</div>
+</ng-template>
+
+<ng-template #loading>
+    <div class="loader-wrapper">
+        <mat-spinner class="loader"></mat-spinner>
+    </div>
 </ng-template>

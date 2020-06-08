@@ -15,6 +15,7 @@ export class SprintsService implements OnDestroy {
     constructor(private query: SprintsQuery,
                 private store: SprintsStore,
                 private http: HttpService) {
+        this.store.setLoading(false);
     }
 
     ngOnDestroy() {
@@ -22,7 +23,7 @@ export class SprintsService implements OnDestroy {
         this.destroyStream$.complete();
     }
 
-    fetchActiveById(sprintId: number): void {
+    fetchActiveById(sprintId: number, callback?: ((Sprint) => void)): void {
         this.store.setLoading(true);
         this.http.sprintById({sprintId})
             .pipe(
@@ -30,8 +31,9 @@ export class SprintsService implements OnDestroy {
                 takeUntil(this.destroyStream$)
             )
             .subscribe((sprint) => {
-                this.store.add(sprint);
+                this.store.set([sprint]);
                 this.store.setActive(sprint.id);
+                callback && callback(sprint);
             });
     }
 

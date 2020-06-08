@@ -7,6 +7,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {TeamSelectComponent} from './components/team-select/team-select.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSelectModule} from '@angular/material/select';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ProjectHeaderModule} from '../project-header/project-header.module';
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import {MatSelectModule} from '@angular/material/select';
         ProjectTeamRoutingModule,
         MatButtonModule,
         MatDialogModule,
-        MatSelectModule
+        MatSelectModule,
+        MatProgressSpinnerModule,
+        ProjectHeaderModule
     ]
 })
 export class ProjectTeamModule { }

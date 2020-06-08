@@ -1,8 +1,9 @@
+<tsm-project-header></tsm-project-header>
 <ng-container *ngIf="!_isLoading; else loading">
     <ng-container *ngIf="_projectId; else noProject">
         <ng-container *ngIf="_users; else noUsers">
             <div class="project-team__header">
-                <div class="project-team__header-left mat-h1">
+                <div class="project-team__header-left mat-h2">
                     <span>Team</span>
                 </div>
                 <div class="project-team__header-right">
@@ -36,10 +37,12 @@
     </ng-container>
 </ng-container>
 <ng-template #loading>
-    <div class="mat-h1">Loading...</div>
+    <div class="loader-wrapper">
+        <mat-spinner class="loader"></mat-spinner>
+    </div>
 </ng-template>
 <ng-template #noProject>
-    <div class="mat-h1">No Project Selected</div>
+<!--    <div class="mat-h1">No Project Selected</div>-->
 </ng-template>
 <ng-template #noUsers>
     <div class="mat-h1">No Users in Project</div>

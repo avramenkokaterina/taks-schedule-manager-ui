@@ -6,6 +6,7 @@ import {Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {TeamSelectComponent} from './components/team-select/team-select.component';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'tsm-project-team',
@@ -25,11 +26,12 @@ export class ProjectTeamComponent implements OnInit, OnDestroy {
     constructor(private projectsQuery: ProjectsQuery,
                 private http: HttpService,
                 private cdr: ChangeDetectorRef,
-                private matDialog: MatDialog) {
+                private matDialog: MatDialog,
+                private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
-        this._projectId = this.projectsQuery.selected && this.projectsQuery.selected.id;
+        this._projectId = (parseInt(this.route.snapshot.queryParamMap.get('projectId'))) || (this.projectsQuery.selected && this.projectsQuery.selected.id);
         if (this._projectId) {
             this.load();
         }

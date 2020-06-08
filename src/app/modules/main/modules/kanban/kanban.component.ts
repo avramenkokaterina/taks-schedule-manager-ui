@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {Sprint, Task, TaskStatus} from '../../../../models/entity.model';
+import {Project, Sprint, Task, TaskStatus} from '../../../../models/entity.model';
 import {TasksQuery} from '../../../../state/tasks/tasks.query';
 import {TasksService} from '../../../../state/tasks/tasks.service';
 import {ProjectsQuery} from '../../../../state/projects/projects.query';
@@ -10,7 +10,7 @@ import {Observable, Subject} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {SprintEditComponent} from './sprint-edit/sprint-edit.component';
 import {HttpService} from '../../../../services/http/http.service';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 import {TaskEditComponent} from '../../../task-edit/task-edit.component';
 import {nullDelete} from '../../../../utils/null-delete';
 import {ProjectsService} from '../../../../state/projects/projects.service';
@@ -24,17 +24,17 @@ export class KanbanComponent implements OnInit, OnDestroy {
 
     _tasks$ = this.tasksQuery.selectAll();
 
-    _errorMessage = 'No tasks in sprint';
-
     _statuses: TaskStatus[] = Object.values(TaskStatus);
-
-    _isError = false;
 
     _activeSprint$: Observable<Sprint> = this.sprintsQuery.selectActive();
 
-    _createSprintButton = false;
+    _sprintId: number;
 
-    private sprintId: number;
+    _tasksLoading$ = this.tasksQuery.selectLoading();
+
+    _sprintLoading$ = this.tasksQuery.selectLoading();
+
+    _projectId: number;
 
     private destroyStream$ = new Subject();
 
@@ -53,26 +53,31 @@ export class KanbanComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         const sprintId = parseInt(this.route.snapshot.queryParamMap.get('sprintId'), 10);
-        if (sprintId) {
-            this.sprintId = sprintId;
-            this.tasksService.fetchBySprintId(sprintId);
-            this.sprintsService.fetchActiveById(sprintId);
-        } else {
-            const project = this.projectsQuery.selected;
-            if (project) {
-                if (project.activeSprintId) {
-                    this.load(project.activeSprintId);
-                } else {
-                    this._errorMessage = 'No active sprint in project';
-                    this._isError = true;
-                    this._createSprintButton = true;
-                }
-
-            } else {
-                this._errorMessage = 'No selected project';
-                this._isError = true;
-            }
+        const projectId = parseInt(this.route.snapshot.queryParamMap.get('projectId'), 10);
+        if (projectId) {
+            this._projectId = projectId;
         }
+        if (sprintId) {
+            this._sprintId = sprintId;
+            this.tasksService.fetchBySprintId(sprintId);
+        }
+        this.sprintsQuery.selectActive()
+            .pipe(
+                filter(sprint => !!sprint),
+                takeUntil(this.destroyStream$)
+            )
+            .subscribe((sprint) => {
+                this._sprintId = sprint.id;
+                this.tasksService.fetchBySprintId(sprint.id);
+            });
+
+        this.projectsQuery.select((state) => state.selected)
+            .pipe(
+                takeUntil(this.destroyStream$)
+            )
+            .subscribe((project: Project) => {
+                this._projectId = project && project.id;
+            });
     }
 
     ngOnDestroy() {
@@ -81,15 +86,15 @@ export class KanbanComponent implements OnInit, OnDestroy {
     }
 
     _reload(): void {
-        this.tasksService.fetchBySprintId(this.sprintId);
+        this.tasksService.fetchBySprintId(this._sprintId);
     }
 
     _endSprint(): void {
-        this.http.endSprint({sprintId: this.sprintId})
+        this.http.endSprint({sprintId: this._sprintId})
             .subscribe(() => {
-                this._isError = true;
-                this._errorMessage = 'No active sprint in project';
-                this._createSprintButton = true;
+                this._sprintId = null;
+                this.sprintsService.resetActive();
+                this.cdr.markForCheck();
             })
     }
 
@@ -103,6 +108,7 @@ export class KanbanComponent implements OnInit, OnDestroy {
                         tasks: selectedSet && Array.from(selectedSet) || []
                     }).subscribe(() => {
                         this._reload();
+                        this.cdr.markForCheck();
                     });
                 }
             }
@@ -110,10 +116,12 @@ export class KanbanComponent implements OnInit, OnDestroy {
     }
 
     _startSprint(): void {
-        this.http.createSprintSchedule({sprintId: this.sprintId})
+        this.http.createSprintSchedule({sprintId: this._sprintId})
             .pipe(takeUntil(this.destroyStream$))
             .subscribe(() => {
-                this.sprintsService.fetchActiveById(this.sprintId);
+                this.sprintsService.fetchActiveById(this._sprintId);
+                this._reload();
+                this.cdr.markForCheck();
             });
     }
 
@@ -127,13 +135,11 @@ export class KanbanComponent implements OnInit, OnDestroy {
                         tasks: selectedSet && Array.from(selectedSet) || [],
                         projectId: this.projectsQuery.selected.id
                     }).subscribe((response) => {
-                        this.sprintId = response.sprint.id;
-                        this.load(this.sprintId);
+                        this.load(response.sprint.id);
                         this.projectsService.update({id: this.projectsQuery.selected.id, activeSprintId: response.sprint.id})
                             .subscribe();
                         this.cdr.markForCheck();
                     });
-                    this._isError = false;
                 }
             }
         });
@@ -149,7 +155,7 @@ export class KanbanComponent implements OnInit, OnDestroy {
                             takeUntil(this.destroyStream$)
                         )
                         .subscribe(() => {
-                            this.tasksService.fetchBySprintId(this.sprintId);
+                            this.tasksService.fetchBySprintId(this._sprintId);
                         });
                 }
             }
@@ -157,17 +163,9 @@ export class KanbanComponent implements OnInit, OnDestroy {
     }
 
     private load(sprintId: number) {
-        this.sprintId = sprintId;
+        this._sprintId = sprintId;
         this.tasksService.fetchBySprintId(sprintId);
         this.sprintsService.fetchActiveById(sprintId);
-        this.router.navigate([], {
-            queryParams: {
-                sprintId: sprintId
-            },
-            relativeTo: this.route,
-            queryParamsHandling: 'merge',
-            replaceUrl: true
-        });
     }
 
 }

@@ -1,55 +1,68 @@
-<ng-container *ngIf="!_isError; else errorTemplate">
+<tsm-project-header></tsm-project-header>
+<ng-container *ngIf="_projectId; else noProject">
     <ng-container [ngTemplateOutlet]="kanbanTemplate"
-                  [ngTemplateOutletContext]="{tasks: _tasks$ | async, sprint: _activeSprint$ | async}"></ng-container>
+                  [ngTemplateOutletContext]="{tasks: _tasks$ | async,
+                                              sprint: _activeSprint$ | async,
+                                              isLoading: (_tasksLoading$ | async) || (_sprintLoading$ | async)}">
+    </ng-container>
 </ng-container>
 
 <ng-template #kanbanTemplate
              let-tasks="tasks"
-             let-sprint="sprint">
-    <ng-container *ngIf="sprint; else noSprint">
-        <div class="mat-h2 header">Sprint Widgets</div>
-        <tsm-sprint-widgets class="kanban__widgets"
-                            [isKanban]="true"
-                            [tasks]="tasks"
-                            [sprint]="sprint"></tsm-sprint-widgets>
-        <div class="kanban__sprint">
-            <div class="kanban__sprint-left">
-                <div class="kanban__sprint-name mat-h2">{{sprint?.code}} {{sprint?.name}}</div>
-                <svg class="kanban__reload-button" (click)="_reload()">
-                    <use xlink:href="#icon-reload"></use>
-                </svg>
+             let-sprint="sprint"
+             let-isLoading="isLoading">
+    <ng-container *ngIf="!isLoading; else loading">
+        <ng-container *ngIf="sprint; else noSprint">
+            <div class="mat-h2 header">Sprint Widgets</div>
+            <tsm-sprint-widgets class="kanban__widgets"
+                                [isKanban]="true"
+                                [tasks]="tasks"
+                                [sprint]="sprint"></tsm-sprint-widgets>
+            <div class="kanban__sprint">
+                <div class="kanban__sprint-left">
+                    <div class="kanban__sprint-name mat-h2"><span [style.color]="'gray'">Sprint: </span>{{sprint?.code}} {{sprint?.name}}</div>
+                    <svg class="kanban__reload-button" (click)="_reload()">
+                        <use xlink:href="#icon-reload"></use>
+                    </svg>
+                </div>
+                <div class="kanban__sprint-right">
+                    <ng-container *ngIf="sprint?.readonly">
+                        <button class="kanban__end-sprint" mat-raised-button color="accent" (click)="_endSprint()">
+                            End Sprint
+                        </button>
+                    </ng-container>
+                    <ng-container *ngIf="!sprint?.readonly">
+                        <button class="kanban__edit-sprint" mat-raised-button color="accent" (click)="_editSprint()">
+                            Edit Sprint
+                        </button>
+                        <button class="kanban__plan-sprint" mat-raised-button color="accent" (click)="_startSprint()">
+                            Plan Sprint
+                        </button>
+                    </ng-container>
+                </div>
             </div>
-            <div class="kanban__sprint-right">
-                <ng-container *ngIf="sprint?.readonly">
-                    <button class="kanban__end-sprint" mat-raised-button color="accent" (click)="_endSprint()">
-                        End Sprint
-                    </button>
-                </ng-container>
-                <ng-container *ngIf="!sprint?.readonly">
-                    <button class="kanban__edit-sprint" mat-raised-button color="accent" (click)="_editSprint()">
-                        Edit Sprint
-                    </button>
-                    <button class="kanban__plan-sprint" mat-raised-button color="accent" (click)="_startSprint()">
-                        Plan Sprint
-                    </button>
-                </ng-container>
+            <div *ngIf="tasks?.length; else noTasksTemplate" class="kanban__tasks">
+                <tsm-task-column *ngFor="let status of _statuses"
+                                 class="kanban__task-column"
+                                 [tasks]="tasks"
+                                 [status]="status"
+                                 (taskClick)="_editTask($event)"></tsm-task-column>
             </div>
-        </div>
-        <div *ngIf="tasks?.length; else noTasksTemplate" class="kanban__tasks">
-            <tsm-task-column *ngFor="let status of _statuses"
-                             class="kanban__task-column"
-                             [tasks]="tasks"
-                             [status]="status"
-                             (taskClick)="_editTask($event)"></tsm-task-column>
-        </div>
+        </ng-container>
     </ng-container>
 </ng-template>
 
-<ng-template #errorTemplate>
+<ng-template #noProject>
+</ng-template>
+
+<ng-template #noTasksTemplate>
+    <div class="mat-h2">No Tasks in Sprint</div>
+</ng-template>
+
+<ng-template #noSprint>
     <div class="kanban__error">
-        <div class="kanban__error-text mat-h1">{{_errorMessage}}</div>
+        <div class="kanban__error-text mat-h2">No Active Sprint in Project</div>
         <button class="kanban__create-sprint"
-                *ngIf="_createSprintButton"
                 mat-raised-button
                 color="accent"
                 (click)="_createSprint()">
@@ -58,10 +71,8 @@
     </div>
 </ng-template>
 
-<ng-template #noTasksTemplate>
-    <div class="mat-h1">No Tasks in Sprint</div>
-</ng-template>
-
-<ng-template #noSprint>
-    <div class="mat-h1">No Sprint Selected</div>
+<ng-template #loading>
+    <div class="loader-wrapper">
+        <mat-spinner class="loader"></mat-spinner>
+    </div>
 </ng-template>

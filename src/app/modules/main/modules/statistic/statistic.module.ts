@@ -8,6 +8,8 @@ import {TimeStatisticComponent} from './components/time-statistic/time-statistic
 import {TasksStatisticComponent} from './components/tasks-statistic/tasks-statistic.component';
 import {OverdueStatisticComponent} from './components/overdue-statistic/overdue-statistic.component';
 import {ChartsModule} from 'ng2-charts';
+import {ProjectHeaderModule} from '../project-header/project-header.module';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import {ChartsModule} from 'ng2-charts';
         CommonModule,
         StatisticRoutingModule,
         SprintWidgetsModule,
-        ChartsModule
+        ChartsModule,
+        ProjectHeaderModule,
+        MatProgressSpinnerModule
     ]
 })
 export class StatisticModule {

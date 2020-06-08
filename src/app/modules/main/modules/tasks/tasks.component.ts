@@ -41,16 +41,6 @@ export class TasksComponent implements OnInit, OnDestroy {
         const idFromRoute = this.route.snapshot.queryParamMap.get('projectId');
         this._projectId = parseInt(idFromRoute, 10) || (this.projectsQuery.selected || {}).id;
         if (this._projectId) {
-            if (!idFromRoute) {
-                this.router.navigate([], {
-                    queryParams: {
-                        projectId: this._projectId
-                    },
-                    relativeTo: this.route,
-                    queryParamsHandling: 'merge',
-                    replaceUrl: true
-                });
-            }
             this.load();
         }
     }

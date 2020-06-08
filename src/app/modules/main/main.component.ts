@@ -3,7 +3,11 @@ import {RouterTabItem} from '../../components/router-tabs/router-tabs.types';
 import {ProjectsService} from '../../state/projects/projects.service';
 import {SprintsService} from '../../state/sprints/sprints.service';
 import {Subject} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ProjectsQuery} from '../../state/projects/projects.query';
+import {SprintsQuery} from '../../state/sprints/sprints.query';
+import {takeUntil} from 'rxjs/operators';
+import {Project, Sprint} from '../../models/entity.model';
 
 @Component({
     selector: 'tsm-main',
@@ -56,13 +60,27 @@ export class TSMMainComponent implements OnInit, OnDestroy {
     private destroyStream$ = new Subject();
 
     constructor(private sprintsService: SprintsService,
-                private route: ActivatedRoute) {
+                private route: ActivatedRoute,
+                private router: Router,
+                private projectsService: ProjectsService,
+                private projectsQuery: ProjectsQuery,
+                private sprintsQuery: SprintsQuery) {
 
     }
 
     ngOnInit() {
         const sprintId = this.route.snapshot.queryParamMap.get('sprintId');
-        sprintId && this.sprintsService.fetchActiveById(parseInt(sprintId, 10));
+        const projectId = this.route.snapshot.queryParamMap.get('projectId');
+        sprintId && this.sprintsService.fetchActiveById(parseInt(sprintId, 10), (sprint: Sprint) => {
+            if (!projectId) {
+                this.projectsService.fetch(sprint.projectId);
+            }
+        });
+        projectId && this.projectsService.fetch(parseInt(projectId, 10), (project: Project) => {
+            if (!sprintId) {
+                project && project.activeSprintId && this.sprintsService.fetchActiveById(project.activeSprintId);
+            }
+        });
     }
 
     ngOnDestroy() {

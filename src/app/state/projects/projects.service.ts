@@ -19,12 +19,12 @@ export class ProjectsService implements OnDestroy {
                 private projectsStore: ProjectsStore,
                 private http: HttpService,
                 private appQuery: AppQuery,
-                private tasksStore: TasksStore,
-                private sprintsStore: SprintsStore) {
+                private tasksStore: TasksStore) {
+        this.projectsStore.setLoading(false);
     }
 
-    fetch(selected?: number): void {
-        this.sprintsStore.setLoading(true);
+    fetch(selected?: number, callback?: ((Project) => void)): void {
+        this.projectsStore.setLoading(true);
         this.http.projectsByUser({userId: this.appQuery.userId})
             .pipe(
                 finalize(() => this.projectsStore.setLoading(false)),
@@ -34,6 +34,7 @@ export class ProjectsService implements OnDestroy {
                 this.projectsStore.set(value);
                 if (selected) {
                     this.setSelected(selected);
+                    callback && callback(this.projectsQuery.selected);
                 }
             });
     }
@@ -44,7 +45,6 @@ export class ProjectsService implements OnDestroy {
             selected: this.projectsQuery.getEntity(id)
         }));
         this.tasksStore.set([]);
-        this.sprintsStore.setActive(null);
     }
 
     create(project: Project): void {

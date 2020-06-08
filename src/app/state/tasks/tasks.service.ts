@@ -13,6 +13,7 @@ export class TasksService implements OnDestroy {
     constructor(private query: TasksQuery,
                 private store: TasksStore,
                 private http: HttpService) {
+        this.store.setLoading(false);
     }
 
     fetchBySprintId(sprintId: number): void {

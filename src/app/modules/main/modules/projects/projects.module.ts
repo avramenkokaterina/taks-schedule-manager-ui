@@ -13,6 +13,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ProjectHeaderModule} from '../project-header/project-header.module';
 
 
 @NgModule({
@@ -31,7 +33,9 @@ import {RouterModule} from '@angular/router';
         MatInputModule,
         MatDatepickerModule,
         ReactiveFormsModule,
-        RouterModule
+        RouterModule,
+        MatProgressSpinnerModule,
+        ProjectHeaderModule
     ]
 })
 export class ProjectsModule {

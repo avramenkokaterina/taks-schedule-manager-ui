@@ -16,6 +16,8 @@ export class TSMProjectsComponent implements OnInit {
 
     _projects$ = this.query.selectAll();
 
+    _loading$ = this.query.selectLoading();
+
     constructor(private service: ProjectsService,
                 private query: ProjectsQuery,
                 private sprintsService: SprintsService,
@@ -46,7 +48,8 @@ export class TSMProjectsComponent implements OnInit {
         }
         this.router.navigate(['main', 'kanban'], {
             queryParams: {
-                sprintId: project.activeSprintId
+                projectId: project.id,
+                sprintId: project.activeSprintId ?? undefined
             }
         });
     }

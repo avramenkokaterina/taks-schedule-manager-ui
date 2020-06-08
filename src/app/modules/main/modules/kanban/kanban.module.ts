@@ -15,6 +15,8 @@ import {ParametersPanelModule} from '../../../../components/parameters-panel/par
 import {TableModule} from '../../../../components/table/table.module';
 import {TaskEditModule} from '../../../task-edit/task-edit.module';
 import {SprintWidgetsModule} from '../../../sprint-widgets/sprint-widgets.module';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ProjectHeaderModule} from '../project-header/project-header.module';
 
 
 @NgModule({
@@ -35,7 +37,9 @@ import {SprintWidgetsModule} from '../../../sprint-widgets/sprint-widgets.module
         ParametersPanelModule,
         TableModule,
         TaskEditModule,
-        SprintWidgetsModule
+        SprintWidgetsModule,
+        MatProgressSpinnerModule,
+        ProjectHeaderModule
     ]
 })
 export class KanbanModule {

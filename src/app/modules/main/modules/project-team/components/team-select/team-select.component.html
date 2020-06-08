@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Project Team</h1>
 <div mat-dialog-content class="team-select__wrapper">
-    <mat-form-field>
+    <mat-form-field *ngIf="!_isLoading; else loading">
         <mat-label>Users</mat-label>
         <mat-select [compareWith]="_compareFn"
                     [placeholder]="'Select Users'"
@@ -18,3 +18,8 @@
     <button mat-raised-button mat-dialog-close>Cancel</button>
     <button mat-raised-button color="primary" [mat-dialog-close]="true" (click)="_save()">Save</button>
 </div>
+<ng-template #loading>
+    <div class="loader-wrapper">
+        <mat-spinner class="loader"></mat-spinner>
+    </div>
+</ng-template>

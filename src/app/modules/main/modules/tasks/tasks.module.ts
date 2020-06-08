@@ -6,6 +6,8 @@ import { TasksComponent } from './tasks.component';
 import {TableModule} from '../../../../components/table/table.module';
 import {MatButtonModule} from '@angular/material/button';
 import {TaskEditModule} from '../../../task-edit/task-edit.module';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ProjectHeaderModule} from '../project-header/project-header.module';
 
 
 @NgModule({
@@ -15,7 +17,9 @@ import {TaskEditModule} from '../../../task-edit/task-edit.module';
         TasksRoutingModule,
         TableModule,
         MatButtonModule,
-        TaskEditModule
+        TaskEditModule,
+        MatProgressSpinnerModule,
+        ProjectHeaderModule
     ]
 })
 export class TasksModule { }

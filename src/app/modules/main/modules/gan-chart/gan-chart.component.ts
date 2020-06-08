@@ -6,7 +6,7 @@ import {GanChartInfo, Sprint} from '../../../../models/entity.model';
 import {AxisDay, AxisModel, AxisWeek} from './gan-chart.model';
 import {SprintsService} from '../../../../state/sprints/sprints.service';
 import {Observable, Subject} from 'rxjs';
-import {filter, map, takeUntil, tap} from 'rxjs/operators';
+import {filter, finalize, map, takeUntil, tap} from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import * as weekday from 'dayjs/plugin/weekday';
 import {labelByStatus} from '../../../../models/status.consts';
@@ -26,16 +26,13 @@ export class GanChartComponent implements OnInit, OnDestroy {
         filter(sprint => !!sprint),
         tap(sprint => {
             this.sprintId = sprint.id;
-            this.router.navigate([], {
-                    relativeTo: this.route,
-                    queryParamsHandling: 'merge',
-                    replaceUrl: true,
-                    queryParams: {sprintId: sprint.id}
-                }
-            );
             this._load();
         })
     );
+
+    _sprintLoading$ = this.sprintsQuery.selectLoading();
+
+    _infoLoading = false;
 
     _axisModel: Observable<AxisModel> = this._sprint$
         .pipe(
@@ -73,8 +70,10 @@ export class GanChartComponent implements OnInit, OnDestroy {
 
 
     _load(): void {
+        this._infoLoading = true;
         this.http.sprintGanChart({sprintId: this.sprintId})
             .pipe(
+                finalize(() => this._infoLoading = false),
                 takeUntil(this.destroyStream$)
             )
             .subscribe((value) => {
