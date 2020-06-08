@@ -5,7 +5,7 @@ const apiProxy = proxy('/api',
     {
         target: 'https://task-schedule-manager.herokuapp.com',
         changeOrigin: true,
-        cookieDomainRewrite: "https://task-schedule-manager-ui.herokuapp.com"
+        cookieDomainRewrite: "task-schedule-manager-ui.herokuapp.com"
     });
 
 const app = express();
